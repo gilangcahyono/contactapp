@@ -1,95 +1,80 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import Box from "@mui/material/Box";
+import { Avatar, TextField, Typography } from "@mui/material";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Link from "next/link";
+import PersonIcon from "@mui/icons-material/Person";
 
-export default function Home() {
+import React from "react";
+
+const Page = () => {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
+    <>
+      <Typography
+        sx={{
+          textAlign: "center",
+          fontWeight: "bold",
+        }}
+        variant="h5"
+        gutterBottom
+      >
+        Contacts
+      </Typography>
+      <Box sx={{ textAlign: "center" }}>
+        <TextField
+          id="outlined-search"
+          label="Search contact"
+          type="search"
+          fullWidth
+          size="small"
+          color="lightgray"
         />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      </Box>
+      <List>
+        <Link
+          href="/gilang-cahyono"
+          style={{ textDecoration: "none", color: "inherit" }}
         >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          <ListItem disablePadding gutterbottom="true">
+            <ListItemButton>
+              <ListItemIcon>
+                <Avatar
+                  alt="Gilang Cahyono"
+                  src="/static/images/avatar/1.jpg"
+                />
+              </ListItemIcon>
+              <ListItemText
+                sx={{ fontWeight: "bold" }}
+                primary="Gilang Cahyono"
+              />
+            </ListItemButton>
+          </ListItem>
+        </Link>
+        <Link
+          href="/puri-rahma-riswanti"
+          style={{ textDecoration: "none", color: "inherit" }}
         >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          <ListItem disablePadding gutterbottom="true">
+            <ListItemButton>
+              <ListItemIcon>
+                <Avatar
+                  alt="Puri Rahma Riswanti"
+                  src="/static/images/avatar/1.jpg"
+                />
+              </ListItemIcon>
+              <ListItemText
+                sx={{ fontWeight: "bold" }}
+                primary="Puri Rahma Riswanti"
+              />
+            </ListItemButton>
+          </ListItem>
+        </Link>
+      </List>
+    </>
   );
-}
+};
+
+export default Page;
