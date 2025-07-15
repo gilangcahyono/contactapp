@@ -64,7 +64,7 @@ const Page = ({ params }) => {
         <Avatar
           alt="Gilang Cahyono"
           src="/static/images/avatar/1.jpg"
-          sx={{ width: 90, height: 90, margin: "20px auto" }}
+          sx={{ width: 70, height: 70, margin: "20px auto" }}
         />
       </Box>
       <TextField

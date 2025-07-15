@@ -1,12 +1,32 @@
-import { Avatar, TextField, Typography } from "@mui/material";
+import SearchInput from "@/components/SearchInput";
+import prisma from "@/lib/prismaClient";
+import { Avatar, IconButton, Typography } from "@mui/material";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Link from "next/link";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 
-const Page = () => {
+const Page = async ({ searchParams }) => {
+  const query = searchParams?.search || "";
+  const contacts = await prisma.contact.findMany({
+    select: {
+      slug: true,
+      name: true,
+      avatar: true,
+    },
+    where: {
+      name: {
+        contains: query,
+      },
+    },
+    orderBy: {
+      name: "asc",
+    },
+  });
+
   return (
     <>
       <Typography
@@ -20,54 +40,40 @@ const Page = () => {
       >
         Contacts
       </Typography>
-      <TextField
-        label="Search contacts"
-        type="search"
-        fullWidth
-        size="small"
-        color="lightgray"
-        sx={{ backgroundColor: "#e8e6e6" }}
-      />
+      <SearchInput />
       <List>
-        <Link
-          href="/gilang-cahyono"
-          style={{ textDecoration: "none", color: "inherit" }}
-        >
-          <ListItem disablePadding gutterbottom="true">
-            <ListItemButton>
-              <ListItemIcon>
-                <Avatar
-                  alt="Gilang Cahyono"
-                  src="/static/images/avatar/1.jpg"
+        {contacts.map((contact) => (
+          <Link
+            key={contact.slug}
+            href={`/${contact.slug}`}
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            <ListItem disablePadding gutterbottom="true">
+              <ListItemButton>
+                <ListItemIcon>
+                  <Avatar alt={contact.name} src={`/${contact.image}`} />
+                </ListItemIcon>
+                <ListItemText
+                  sx={{ fontWeight: "bold" }}
+                  primary={contact.name}
                 />
-              </ListItemIcon>
-              <ListItemText
-                sx={{ fontWeight: "bold" }}
-                primary="Gilang Cahyono"
-              />
-            </ListItemButton>
-          </ListItem>
-        </Link>
-        <Link
-          href="/puri-rahma-riswanti"
-          style={{ textDecoration: "none", color: "inherit" }}
-        >
-          <ListItem disablePadding gutterbottom="true">
-            <ListItemButton>
-              <ListItemIcon>
-                <Avatar
-                  alt="Puri Rahma Riswanti"
-                  src="/static/images/avatar/1.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText
-                sx={{ fontWeight: "bold" }}
-                primary="Puri Rahma Riswanti"
-              />
-            </ListItemButton>
-          </ListItem>
-        </Link>
+              </ListItemButton>
+            </ListItem>
+          </Link>
+        ))}
       </List>
+      <IconButton
+        size="small"
+        sx={{
+          position: "fixed",
+          bottom: "4rem",
+          right: "2rem",
+        }}
+      >
+        <Link href="/new">
+          <AddCircleIcon color="primary" sx={{ fontSize: "4rem" }} />
+        </Link>
+      </IconButton>
     </>
   );
 };
