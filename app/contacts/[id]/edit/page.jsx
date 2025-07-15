@@ -1,35 +1,31 @@
-"use client";
-
 import {
   Avatar,
   Box,
   Button,
-  Dialog,
-  DialogContent,
-  DialogContentText,
   Grid,
   IconButton,
   TextField,
   Typography,
-  DialogTitle,
-  DialogActions,
 } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
-import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
+
 import Link from "next/link";
-import { useState } from "react";
+import DeleteContactButton from "@/components/DeleteContactButton";
+import prisma from "@/lib/prismaClient";
+import { notFound } from "next/navigation";
 
-const Page = ({ params }) => {
-  const [open, setOpen] = useState(false);
+const Page = async ({ params }) => {
+  const contact = await prisma.contact.findUnique({
+    where: {
+      id: Number(params.id),
+    },
+  });
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+  if (!contact) {
+    return notFound();
+  }
 
   return (
     <>
@@ -41,7 +37,7 @@ const Page = ({ params }) => {
       >
         <Grid size={3}>
           <Link
-            href={`/${params.slug}`}
+            href={`/contacts/${params.id}`}
             style={{ textDecoration: "none", color: "inherit" }}
           >
             <IconButton color="inherit">
@@ -62,8 +58,8 @@ const Page = ({ params }) => {
       </Grid>
       <Box sx={{ textAlign: "center", marginBottom: "40px" }}>
         <Avatar
-          alt="Gilang Cahyono"
-          src="/static/images/avatar/1.jpg"
+          alt={contact.name}
+          src={`/${contact.avatar || ""}`}
           sx={{ width: 70, height: 70, margin: "20px auto" }}
         />
       </Box>
@@ -73,7 +69,7 @@ const Page = ({ params }) => {
         variant="outlined"
         fullWidth
         color="lightgray"
-        defaultValue="Gilang Cahyono"
+        defaultValue={contact.name}
         focused
         type="text"
         sx={{ backgroundColor: "white", marginBottom: "25px" }}
@@ -84,43 +80,12 @@ const Page = ({ params }) => {
         variant="outlined"
         fullWidth
         color="lightgray"
-        defaultValue="081234567890"
+        defaultValue={contact.mobile}
         focused
         type="tel"
         sx={{ backgroundColor: "white", marginBottom: "25px" }}
       />
-      <div>
-        <Button
-          variant="text"
-          color="error"
-          startIcon={<DeleteIcon />}
-          sx={{ backgroundColor: "white" }}
-          onClick={handleClickOpen}
-        >
-          Delete this contact
-        </Button>
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">
-            {"Delete this contact?"}
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Delete "Gilang Cahyono" from your contacts?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="error">
-              Cancel
-            </Button>
-            <Button onClick={handleClose}>Delete</Button>
-          </DialogActions>
-        </Dialog>
-      </div>
+      <DeleteContactButton />
     </>
   );
 };

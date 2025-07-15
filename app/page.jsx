@@ -12,11 +12,6 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 const Page = async ({ searchParams }) => {
   const query = searchParams?.search || "";
   const contacts = await prisma.contact.findMany({
-    select: {
-      slug: true,
-      name: true,
-      avatar: true,
-    },
     where: {
       name: {
         contains: query,
@@ -44,14 +39,14 @@ const Page = async ({ searchParams }) => {
       <List>
         {contacts.map((contact) => (
           <Link
-            key={contact.slug}
-            href={`/${contact.slug}`}
+            key={contact.id}
+            href={`/contacts/${contact.id}`}
             style={{ textDecoration: "none", color: "inherit" }}
           >
             <ListItem disablePadding gutterbottom="true">
               <ListItemButton>
                 <ListItemIcon>
-                  <Avatar alt={contact.name} src={`/${contact.image}`} />
+                  <Avatar alt={contact.name} src={`/${contact.avatar || ""}`} />
                 </ListItemIcon>
                 <ListItemText
                   sx={{ fontWeight: "bold" }}
@@ -66,11 +61,11 @@ const Page = async ({ searchParams }) => {
         size="small"
         sx={{
           position: "fixed",
-          bottom: "4rem",
-          right: "2rem",
+          bottom: "3rem",
+          right: "1.5rem",
         }}
       >
-        <Link href="/new">
+        <Link href="/contacts/new">
           <AddCircleIcon color="primary" sx={{ fontSize: "4rem" }} />
         </Link>
       </IconButton>

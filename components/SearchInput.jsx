@@ -10,7 +10,11 @@ const SearchInput = () => {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      router.replace(`/?search=${encodeURIComponent(query)}`);
+      if (query.trim()) {
+        router.replace(`/?search=${encodeURIComponent(query)}`);
+      } else {
+        router.replace("/");
+      }
     }, 300);
     return () => clearTimeout(timeout);
   }, [query, router]);
@@ -23,7 +27,6 @@ const SearchInput = () => {
       size="small"
       color="lightgray"
       sx={{ backgroundColor: "#e8e6e6" }}
-      value={query}
       onChange={(e) => setQuery(e.target.value)}
     />
   );

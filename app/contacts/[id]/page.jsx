@@ -6,11 +6,12 @@ import ActionMenu from "@/components/ActionMenu";
 import prisma from "@/lib/prismaClient";
 
 const Page = async ({ params }) => {
-  const contact = await prisma.contact.findUniqueOrThrow({
+  const contact = await prisma.contact.findUnique({
     where: {
-      slug: params.slug,
+      id: Number(params.id),
     },
   });
+
   return (
     <>
       <Grid container paddingTop={1}>
@@ -22,13 +23,13 @@ const Page = async ({ params }) => {
           </Link>
         </Grid>
         <Grid size={6} textAlign="right">
-          <ActionMenu slug={params.slug} />
+          <ActionMenu id={params.id} />
         </Grid>
       </Grid>
       <Box sx={{ textAlign: "center", marginBottom: "40px" }}>
         <Avatar
           alt={contact.name}
-          src={contact.avatar}
+          src={`/${contact.avatar || ""}`}
           sx={{ width: 90, height: 90, margin: "20px auto" }}
         />
         <Typography variant="h4">{contact.name}</Typography>

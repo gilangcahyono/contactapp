@@ -13,23 +13,18 @@ import {
 import Link from "next/link";
 import { useState } from "react";
 
-const ActionMenu = ({ slug }) => {
+const ActionMenu = ({ id }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleDelete = () => {
-    setAnchorEl(null);
-    alert("Contact deleted");
-    window.location.href = "/";
+  const handleClick = (e) => {
+    setAnchorEl(e.currentTarget);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   return (
     <>
       <IconButton
@@ -52,43 +47,17 @@ const ActionMenu = ({ slug }) => {
           },
         }}
       >
-        <Link
-          href={`/${slug}/edit`}
-          style={{ textDecoration: "none", color: "inherit" }}
-        >
-          <MenuItem>
-            <ListItemIcon>
-              <EditIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>Edit</ListItemText>
-          </MenuItem>
-        </Link>
-        <MenuItem onClick={handleDelete}>
+        <MenuItem component={Link} href={`/contacts/${id}/edit`}>
+          <ListItemIcon>
+            <EditIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>Edit</ListItemText>
+        </MenuItem>
+        <MenuItem>
           <ListItemIcon>
             <DeleteIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText>Delete</ListItemText>
-          {/* <Dialog
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogTitle id="alert-dialog-title">
-              {"Delete this contact?"}
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                Delete "Gilang Cahyono" from your contacts?
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose} color="error">
-                Cancel
-              </Button>
-              <Button onClick={handleClose}>Delete</Button>
-            </DialogActions>
-          </Dialog> */}
         </MenuItem>
       </Menu>
     </>

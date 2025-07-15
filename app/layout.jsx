@@ -19,6 +19,7 @@ export default function RootLayout({ children }) {
           sx={{
             backgroundColor: "#f7f5f0",
             minHeight: "100dvh",
+            position: "relative",
           }}
           maxWidth="sm"
         >
