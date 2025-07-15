@@ -1,3 +1,4 @@
+import "./globals.css";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
@@ -13,10 +14,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body style={{ margin: 0, padding: 0, backgroundColor: "lightgray" }}>
+      <body style={{ backgroundColor: "black" }}>
         <Container
           sx={{
-            backgroundColor: "white",
+            backgroundColor: "#f7f5f0",
             minHeight: "100dvh",
           }}
           maxWidth="sm"

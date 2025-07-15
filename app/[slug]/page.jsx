@@ -2,34 +2,59 @@
 
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Avatar, Box, Button, Typography } from "@mui/material";
-import Grid from "@mui/material/Grid";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import {
+  Avatar,
+  Box,
+  Typography,
+  Grid,
+  Menu,
+  MenuItem,
+  IconButton,
+  ListItemIcon,
+  ListItemText,
+  Dialog,
+  DialogContentText,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
+} from "@mui/material";
 import Link from "next/link";
 import { useState } from "react";
-import PersonIcon from "@mui/icons-material/Person";
 
 const Page = ({ params }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
+  const handleDelete = () => {
+    setAnchorEl(null);
+    alert("Contact deleted");
+    window.location.href = "/";
+  };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   return (
     <>
-      <Grid container>
+      <Grid container paddingTop={1}>
         <Grid size={6}>
           <Link href="/" style={{ textDecoration: "none", color: "inherit" }}>
-            <ArrowBackIcon />
+            <IconButton color="inherit">
+              <ArrowBackIcon />
+            </IconButton>
           </Link>
         </Grid>
         <Grid size={6} textAlign="right">
-          <Button
-            id="basic-button"
+          <IconButton
             aria-controls={open ? "basic-menu" : undefined}
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
@@ -37,7 +62,7 @@ const Page = ({ params }) => {
             color="inherit"
           >
             <MoreVertIcon />
-          </Button>
+          </IconButton>
           <Menu
             id="basic-menu"
             anchorEl={anchorEl}
@@ -49,22 +74,77 @@ const Page = ({ params }) => {
               },
             }}
           >
-            <MenuItem onClick={handleClose}>Edit</MenuItem>
-            <MenuItem onClick={handleClose}>Delete</MenuItem>
+            <Link
+              href={`/${params.slug}/edit`}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <MenuItem>
+                <ListItemIcon>
+                  <EditIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>Edit</ListItemText>
+              </MenuItem>
+            </Link>
+            <MenuItem onClick={handleDelete}>
+              <ListItemIcon>
+                <DeleteIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>Delete</ListItemText>
+              {/* <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"Delete this contact?"}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    Delete "Gilang Cahyono" from your contacts?
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose} color="error">
+                    Cancel
+                  </Button>
+                  <Button onClick={handleClose}>Delete</Button>
+                </DialogActions>
+              </Dialog> */}
+            </MenuItem>
           </Menu>
         </Grid>
       </Grid>
-      <Box sx={{ textAlign: "center" }}>
+      <Box sx={{ textAlign: "center", marginBottom: "40px" }}>
         <Avatar
           alt="Gilang Cahyono"
           src="/static/images/avatar/1.jpg"
           sx={{ width: 90, height: 90, margin: "20px auto" }}
         />
         <Typography variant="h4">Gilang Cahyono</Typography>
-        <Typography variant="body1" gutterBottom>
-          +62 812-3456-7890
-        </Typography>
       </Box>
+      <Grid
+        container
+        display="flex"
+        alignItems="center"
+        sx={{ borderRadius: "15px", backgroundColor: "white", padding: "15px" }}
+      >
+        <Grid size={6}>
+          <Typography variant="body1">+62 812-3456-7890</Typography>
+          <Typography variant="caption" color="gray">
+            Mobile | Indonesia
+          </Typography>
+        </Grid>
+        <Grid size={6} textAlign="right">
+          <IconButton
+            color="success"
+            href="https://wa.me/6281234567890"
+            target="_blank"
+          >
+            <WhatsAppIcon fontSize="large" />
+          </IconButton>
+        </Grid>
+      </Grid>
     </>
   );
 };

@@ -1,4 +1,3 @@
-import Box from "@mui/material/Box";
 import { Avatar, TextField, Typography } from "@mui/material";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -6,9 +5,6 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Link from "next/link";
-import PersonIcon from "@mui/icons-material/Person";
-
-import React from "react";
 
 const Page = () => {
   return (
@@ -17,22 +13,21 @@ const Page = () => {
         sx={{
           textAlign: "center",
           fontWeight: "bold",
+          paddingTop: "1rem",
         }}
         variant="h5"
         gutterBottom
       >
         Contacts
       </Typography>
-      <Box sx={{ textAlign: "center" }}>
-        <TextField
-          id="outlined-search"
-          label="Search contact"
-          type="search"
-          fullWidth
-          size="small"
-          color="lightgray"
-        />
-      </Box>
+      <TextField
+        label="Search contacts"
+        type="search"
+        fullWidth
+        size="small"
+        color="lightgray"
+        sx={{ backgroundColor: "#e8e6e6" }}
+      />
       <List>
         <Link
           href="/gilang-cahyono"
