@@ -1,13 +1,13 @@
 import SearchInput from "@/components/SearchInput";
 import prisma from "@/lib/prismaClient";
 import { Avatar, IconButton, Typography } from "@mui/material";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Link from "next/link";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 const Page = async ({ searchParams }) => {
   const query = searchParams?.search || "";
