@@ -16,11 +16,9 @@ const Page = async ({ params }) => {
     <>
       <Grid container paddingTop={1}>
         <Grid size={6}>
-          <Link href="/" style={{ textDecoration: "none", color: "inherit" }}>
-            <IconButton color="inherit">
-              <ArrowBackIcon />
-            </IconButton>
-          </Link>
+          <IconButton component={Link} href="/" color="inherit">
+            <ArrowBackIcon />
+          </IconButton>
         </Grid>
         <Grid size={6} textAlign="right">
           <ActionMenu id={params.id} />

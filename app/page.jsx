@@ -7,10 +7,12 @@ import ContactList from "@/components/ContactList";
 
 const Page = async ({ searchParams }) => {
   const query = searchParams?.search || "";
+
   const contacts = await prisma.contact.findMany({
     where: {
       name: {
         contains: query,
+        mode: "insensitive",
       },
     },
     orderBy: {
@@ -32,16 +34,17 @@ const Page = async ({ searchParams }) => {
       <SearchInput />
       <ContactList contacts={contacts} />
       <IconButton
+        component={Link}
+        href="/contacts/new"
         size="small"
+        position="fixed"
         sx={{
           position: "fixed",
           bottom: "3rem",
           right: "1.5rem",
         }}
       >
-        <Link href="/contacts/new">
-          <AddCircleIcon color="primary" sx={{ fontSize: "4rem" }} />
-        </Link>
+        <AddCircleIcon color="primary" sx={{ fontSize: "4rem" }} />
       </IconButton>
     </>
   );

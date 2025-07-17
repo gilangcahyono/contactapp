@@ -35,16 +35,18 @@ const Page = () => {
             </Typography>
           </Grid>
           <Grid size={3} textAlign="right">
-            <SubmitButton>
-              <CheckIcon />
-            </SubmitButton>
+            <IconButton color="inherit" component="span">
+              <SubmitButton>
+                <CheckIcon />
+              </SubmitButton>
+            </IconButton>
           </Grid>
         </Grid>
         <Box sx={{ textAlign: "center", marginBottom: "40px" }}>
           <Avatar sx={{ width: 70, height: 70, margin: "20px auto" }} />
         </Box>
         <TextField
-          name="name"
+          name="contactName"
           label="Name"
           variant="outlined"
           fullWidth
@@ -54,7 +56,7 @@ const Page = () => {
           sx={{ backgroundColor: "white", marginBottom: "25px" }}
         />
         <TextField
-          name="mobile"
+          name="contactMobile"
           label="Mobile"
           variant="outlined"
           fullWidth

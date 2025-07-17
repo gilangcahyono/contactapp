@@ -12,6 +12,8 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import { useState } from "react";
+import { deleteContact } from "@/lib/actions";
+import SubmitButton from "./SubmitButton";
 
 const ActionMenu = ({ id }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -53,12 +55,17 @@ const ActionMenu = ({ id }) => {
           </ListItemIcon>
           <ListItemText>Edit</ListItemText>
         </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <DeleteIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText>Delete</ListItemText>
-        </MenuItem>
+        <form action={deleteContact}>
+          <input type="hidden" name="contactId" value={id} />
+          <SubmitButton>
+            <MenuItem>
+              <ListItemIcon>
+                <DeleteIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>Delete</ListItemText>
+            </MenuItem>
+          </SubmitButton>
+        </form>
       </Menu>
     </>
   );

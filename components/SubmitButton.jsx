@@ -8,9 +8,18 @@ const SubmitButton = ({ children }) => {
 
   return (
     <>
-      <IconButton color="inherit" type="submit">
+      <button
+        type="submit"
+        style={{
+          backgroundColor: "inherit",
+          border: "none",
+          cursor: "pointer",
+        }}
+        onMouseEnter={(e) => (e.target.style.backgroundColor = "transparent")}
+        onMouseLeave={(e) => (e.target.style.backgroundColor = "transparent")}
+      >
         {children}
-      </IconButton>
+      </button>
       <Backdrop
         sx={(theme) => ({
           color: "#fff",
