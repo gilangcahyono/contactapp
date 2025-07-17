@@ -1,16 +1,15 @@
 "use client";
 
 import { Backdrop, CircularProgress, IconButton } from "@mui/material";
-import CheckIcon from "@mui/icons-material/Check";
 import { useFormStatus } from "react-dom";
 
-const SaveButton = () => {
+const SubmitButton = ({ children }) => {
   const { pending } = useFormStatus();
 
   return (
     <>
       <IconButton color="inherit" type="submit">
-        <CheckIcon />
+        {children}
       </IconButton>
       <Backdrop
         sx={(theme) => ({
@@ -25,4 +24,4 @@ const SaveButton = () => {
   );
 };
 
-export default SaveButton;
+export default SubmitButton;

@@ -1,19 +1,22 @@
-"use client";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
-import { Backdrop, CircularProgress } from "@mui/material";
-
-const Loading = () => {
+export default function Loading() {
   return (
-    <Backdrop
-      sx={(theme) => ({
-        color: "#fff",
-        zIndex: theme.zIndex.drawer + 1,
-      })}
-      open={true}
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      position="absolute"
+      zIndex={9999999}
+      inset={0}
+      bgcolor="rgba(0, 0, 0, 0.1)"
+      top={0}
+      left={0}
+      right={0}
+      bottom={0}
     >
-      <CircularProgress color="inherit" />
-    </Backdrop>
+      <CircularProgress />
+    </Box>
   );
-};
-
-export default Loading;
+}

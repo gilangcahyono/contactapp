@@ -9,7 +9,8 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import Link from "next/link";
 import { createNewContact } from "@/lib/actions";
-import SaveButton from "@/components/SaveButton";
+import SubmitButton from "@/components/SubmitButton";
+import CheckIcon from "@mui/icons-material/Check";
 
 const Page = () => {
   return (
@@ -34,7 +35,9 @@ const Page = () => {
             </Typography>
           </Grid>
           <Grid size={3} textAlign="right">
-            <SaveButton />
+            <SubmitButton>
+              <CheckIcon />
+            </SubmitButton>
           </Grid>
         </Grid>
         <Box sx={{ textAlign: "center", marginBottom: "40px" }}>

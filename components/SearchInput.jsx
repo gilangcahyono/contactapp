@@ -1,17 +1,22 @@
 "use client";
 
 import { TextField } from "@mui/material";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 
 const SearchInput = () => {
-  const [query, setQuery] = useState("");
+  const searchParams = useSearchParams();
   const router = useRouter();
+  const qValue = searchParams.get("search") || "";
+
+  const [query, setQuery] = useState(qValue);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
+      const params = new URLSearchParams();
       if (query.trim()) {
-        router.replace(`/?search=${encodeURIComponent(query)}`);
+        params.set("search", query);
+        router.push(`?${params.toString()}`);
       } else {
         router.replace("/");
       }
@@ -26,6 +31,7 @@ const SearchInput = () => {
       fullWidth
       size="small"
       color="lightgray"
+      value={query}
       sx={{ backgroundColor: "#e8e6e6" }}
       onChange={(e) => setQuery(e.target.value)}
     />
