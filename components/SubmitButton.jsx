@@ -15,8 +15,6 @@ const SubmitButton = ({ children }) => {
           border: "none",
           cursor: "pointer",
         }}
-        onMouseEnter={(e) => (e.target.style.backgroundColor = "transparent")}
-        onMouseLeave={(e) => (e.target.style.backgroundColor = "transparent")}
       >
         {children}
       </button>

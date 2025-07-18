@@ -85,7 +85,17 @@ const Page = async ({ params }) => {
         type="tel"
         sx={{ backgroundColor: "white", marginBottom: "25px" }}
       />
-      <DeleteContactButton />
+      <DeleteContactButton contact={contact}>
+        <Button
+          type="button"
+          variant="text"
+          color="error"
+          startIcon={<DeleteIcon />}
+          sx={{ backgroundColor: "white" }}
+        >
+          Delete this contact
+        </Button>
+      </DeleteContactButton>
     </>
   );
 };

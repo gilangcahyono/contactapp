@@ -12,20 +12,12 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import { useState } from "react";
-import { deleteContact } from "@/lib/actions";
 import SubmitButton from "./SubmitButton";
+import DeleteContactButton from "./DeleteContactButton";
 
-const ActionMenu = ({ id }) => {
+const ActionMenu = ({ contact }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-
-  const handleClick = (e) => {
-    setAnchorEl(e.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   return (
     <>
@@ -33,7 +25,7 @@ const ActionMenu = ({ id }) => {
         aria-controls={open ? "basic-menu" : undefined}
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
-        onClick={handleClick}
+        onClick={(e) => setAnchorEl(e.currentTarget)}
         color="inherit"
       >
         <MoreVertIcon />
@@ -42,21 +34,20 @@ const ActionMenu = ({ id }) => {
         id="basic-menu"
         anchorEl={anchorEl}
         open={open}
-        onClose={handleClose}
+        onClose={() => setAnchorEl(null)}
         slotProps={{
           list: {
             "aria-labelledby": "basic-button",
           },
         }}
       >
-        <MenuItem component={Link} href={`/contacts/${id}/edit`}>
+        <MenuItem component={Link} href={`/contacts/${contact.id}/edit`}>
           <ListItemIcon>
             <EditIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText>Edit</ListItemText>
         </MenuItem>
-        <form action={deleteContact}>
-          <input type="hidden" name="contactId" value={id} />
+        <DeleteContactButton contact={contact}>
           <SubmitButton>
             <MenuItem>
               <ListItemIcon>
@@ -65,7 +56,7 @@ const ActionMenu = ({ id }) => {
               <ListItemText>Delete</ListItemText>
             </MenuItem>
           </SubmitButton>
-        </form>
+        </DeleteContactButton>
       </Menu>
     </>
   );

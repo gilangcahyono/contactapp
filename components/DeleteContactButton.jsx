@@ -1,6 +1,6 @@
 "use client";
 
-import DeleteIcon from "@mui/icons-material/Delete";
+import { deleteContact } from "@/lib/actions";
 import {
   Button,
   Dialog,
@@ -9,33 +9,18 @@ import {
   DialogTitle,
   DialogActions,
 } from "@mui/material";
-import { cloneElement, useState } from "react";
+import { useState } from "react";
+import SubmitButton from "./SubmitButton";
 
-const DeleteContactButton = () => {
+const DeleteContactButton = ({ children, contact }) => {
   const [open, setOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   return (
     <>
-      <Button
-        variant="text"
-        color="error"
-        startIcon={<DeleteIcon />}
-        sx={{ backgroundColor: "white" }}
-        onClick={handleClickOpen}
-      >
-        Delete this contact
-      </Button>
+      <div onClick={() => setOpen(true)}>{children}</div>
       <Dialog
         open={open}
-        onClose={handleClose}
+        onClose={() => setOpen(false)}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -44,14 +29,19 @@ const DeleteContactButton = () => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Delete "Gilang Cahyono" from your contacts?
+            Delete "{contact.name}" from your contacts?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="error">
+          <Button type="button" onClick={() => setOpen(false)} color="error">
             Cancel
           </Button>
-          <Button onClick={handleClose}>Delete</Button>
+          <form action={deleteContact}>
+            <input type="hidden" name="contactId" value={contact.id} />
+            <SubmitButton>
+              <Button as="span">Delete</Button>
+            </SubmitButton>
+          </form>
         </DialogActions>
       </Dialog>
     </>

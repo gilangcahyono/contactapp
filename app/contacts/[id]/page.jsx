@@ -21,7 +21,7 @@ const Page = async ({ params }) => {
           </IconButton>
         </Grid>
         <Grid size={6} textAlign="right">
-          <ActionMenu id={params.id} />
+          <ActionMenu contact={contact} />
         </Grid>
       </Grid>
       <Box sx={{ textAlign: "center", marginBottom: "40px" }}>
