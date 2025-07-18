@@ -33,7 +33,10 @@ const ContactList = ({ contacts }) => {
           <ListItem disablePadding gutterbottom="true">
             <ListItemButton>
               <ListItemIcon>
-                <Avatar alt={contact.name} src={`/${contact.avatar || ""}`} />
+                <Avatar
+                  alt={contact.name}
+                  src={`/uploads/${contact.avatar || ""}`}
+                />
               </ListItemIcon>
               <ListItemText
                 sx={{ fontWeight: "bold" }}

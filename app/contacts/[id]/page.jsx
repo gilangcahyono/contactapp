@@ -27,7 +27,7 @@ const Page = async ({ params }) => {
       <Box sx={{ textAlign: "center", marginBottom: "40px" }}>
         <Avatar
           alt={contact.name}
-          src={`/${contact.avatar || ""}`}
+          src={`/uploads/${contact.avatar || ""}`}
           sx={{ width: 90, height: 90, margin: "20px auto" }}
         />
         <Typography variant="h4">{contact.name}</Typography>

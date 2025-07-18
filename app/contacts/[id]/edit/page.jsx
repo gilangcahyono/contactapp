@@ -59,7 +59,7 @@ const Page = async ({ params }) => {
       <Box sx={{ textAlign: "center", marginBottom: "40px" }}>
         <Avatar
           alt={contact.name}
-          src={`/${contact.avatar || ""}`}
+          src={`/uploads/${contact.avatar || ""}`}
           sx={{ width: 70, height: 70, margin: "20px auto" }}
         />
       </Box>

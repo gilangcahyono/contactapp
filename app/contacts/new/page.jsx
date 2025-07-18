@@ -11,6 +11,7 @@ import Link from "next/link";
 import { createNewContact } from "@/lib/actions";
 import SubmitButton from "@/components/SubmitButton";
 import CheckIcon from "@mui/icons-material/Check";
+import ImageUploadBox from "@/components/ImageUploadBox";
 
 const Page = () => {
   return (
@@ -42,9 +43,7 @@ const Page = () => {
             </IconButton>
           </Grid>
         </Grid>
-        <Box sx={{ textAlign: "center", marginBottom: "40px" }}>
-          <Avatar sx={{ width: 70, height: 70, margin: "20px auto" }} />
-        </Box>
+        <ImageUploadBox name="contactAvatar" />
         <TextField
           name="contactName"
           label="Name"
