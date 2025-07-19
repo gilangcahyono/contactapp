@@ -14,12 +14,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body style={{ backgroundColor: "black" }}>
+      <body style={{ backgroundColor: "#f7f5f0" }}>
         <Container
           sx={{
-            backgroundColor: "#f7f5f0",
             minHeight: "100dvh",
-            position: "relative",
           }}
           maxWidth="sm"
         >

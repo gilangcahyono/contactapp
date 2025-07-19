@@ -4,6 +4,7 @@ import { Avatar, Box, Typography, Grid, IconButton } from "@mui/material";
 import Link from "next/link";
 import ActionMenu from "@/components/ActionMenu";
 import prisma from "@/lib/prismaClient";
+import { notFound } from "next/navigation";
 
 const Page = async ({ params }) => {
   const contact = await prisma.contact.findUnique({
@@ -11,6 +12,10 @@ const Page = async ({ params }) => {
       id: Number(params.id),
     },
   });
+
+  if (!contact) {
+    return notFound();
+  }
 
   return (
     <>
@@ -27,7 +32,7 @@ const Page = async ({ params }) => {
       <Box sx={{ textAlign: "center", marginBottom: "40px" }}>
         <Avatar
           alt={contact.name}
-          src={`/uploads/${contact.avatar || ""}`}
+          src={contact.avatar || ""}
           sx={{ width: 90, height: 90, margin: "20px auto" }}
         />
         <Typography variant="h4">{contact.name}</Typography>

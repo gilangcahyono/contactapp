@@ -15,6 +15,8 @@ import Link from "next/link";
 import DeleteContactButton from "@/components/DeleteContactButton";
 import prisma from "@/lib/prismaClient";
 import { notFound } from "next/navigation";
+import SubmitButton from "@/components/SubmitButton";
+import { updateContact } from "@/server/actions";
 
 const Page = async ({ params }) => {
   const contact = await prisma.contact.findUnique({
@@ -29,62 +31,71 @@ const Page = async ({ params }) => {
 
   return (
     <>
-      <Grid
-        container
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Grid size={3}>
-          <Link
-            href={`/contacts/${params.id}`}
-            style={{ textDecoration: "none", color: "inherit" }}
-          >
-            <IconButton color="inherit">
-              <CloseIcon />
+      <form action={updateContact}>
+        <input type="hidden" name="contactId" value={contact.id} readOnly />
+        <Grid
+          container
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Grid size={3}>
+            <Link
+              href={`/contacts/${params.id}`}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <IconButton color="inherit">
+                <CloseIcon />
+              </IconButton>
+            </Link>
+          </Grid>
+          <Grid size={6} textAlign="center">
+            <Typography paddingTop="1rem" variant="h6" gutterBottom>
+              Edit Contacts
+            </Typography>
+          </Grid>
+          <Grid size={3} textAlign="right">
+            <IconButton color="inherit" component="span">
+              <SubmitButton>
+                <CheckIcon />
+              </SubmitButton>
             </IconButton>
-          </Link>
+          </Grid>
         </Grid>
-        <Grid size={6} textAlign="center">
-          <Typography paddingTop="1rem" variant="h6" gutterBottom>
-            Edit Contacts
-          </Typography>
-        </Grid>
-        <Grid size={3} textAlign="right">
-          <IconButton color="inherit" href="/">
-            <CheckIcon />
-          </IconButton>
-        </Grid>
-      </Grid>
-      <Box sx={{ textAlign: "center", marginBottom: "40px" }}>
-        <Avatar
-          alt={contact.name}
-          src={`/uploads/${contact.avatar || ""}`}
-          sx={{ width: 70, height: 70, margin: "20px auto" }}
+
+        <Box sx={{ textAlign: "center", marginBottom: "40px" }}>
+          <Avatar
+            alt={contact.name}
+            src={contact.avatar || ""}
+            sx={{ width: 70, height: 70, margin: "20px auto" }}
+          />
+        </Box>
+
+        <TextField
+          label="Name"
+          name="contactName"
+          variant="outlined"
+          fullWidth
+          color="lightgray"
+          defaultValue={contact.name}
+          focused
+          type="text"
+          sx={{ backgroundColor: "white", marginBottom: "25px" }}
         />
-      </Box>
-      <TextField
-        id="outlined-basic"
-        label="Name"
-        variant="outlined"
-        fullWidth
-        color="lightgray"
-        defaultValue={contact.name}
-        focused
-        type="text"
-        sx={{ backgroundColor: "white", marginBottom: "25px" }}
-      />
-      <TextField
-        id="outlined-basic"
-        label="Mobile"
-        variant="outlined"
-        fullWidth
-        color="lightgray"
-        defaultValue={contact.mobile}
-        focused
-        type="tel"
-        sx={{ backgroundColor: "white", marginBottom: "25px" }}
-      />
+
+        <TextField
+          label="Mobile"
+          name="contactMobile"
+          variant="outlined"
+          fullWidth
+          color="lightgray"
+          defaultValue={contact.mobile}
+          focused
+          type="tel"
+          sx={{ backgroundColor: "white", marginBottom: "25px" }}
+        />
+      </form>
+
       <DeleteContactButton contact={contact}>
         <Button
           type="button"

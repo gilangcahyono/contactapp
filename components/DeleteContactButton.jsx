@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteContact } from "@/lib/actions";
+import { deleteContact } from "@/server/actions";
 import {
   Button,
   Dialog,

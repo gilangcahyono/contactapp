@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import Link from "next/link";
-import { createNewContact } from "@/lib/actions";
+import { createNewContact } from "@/server/actions";
 import SubmitButton from "@/components/SubmitButton";
 import CheckIcon from "@mui/icons-material/Check";
 import ImageUploadBox from "@/components/ImageUploadBox";

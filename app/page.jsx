@@ -1,6 +1,6 @@
 import SearchInput from "@/components/SearchInput";
 import prisma from "@/lib/prismaClient";
-import { Avatar, IconButton, Typography } from "@mui/material";
+import { Avatar, Container, IconButton, Typography } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Link from "next/link";
 import ContactList from "@/components/ContactList";
@@ -37,10 +37,9 @@ const Page = async ({ searchParams }) => {
         component={Link}
         href="/contacts/new"
         size="small"
-        position="fixed"
         sx={{
           position: "fixed",
-          bottom: "3rem",
+          bottom: "1.5rem",
           right: "1.5rem",
         }}
       >
