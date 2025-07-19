@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { UTApi } from "uploadthing/server";
 const utapi = new UTApi();
 
-export async function createNewContact(formData) {
+export async function createContact(formData) {
   const contactName = formData.get("contactName");
   const contactMobile = formData.get("contactMobile");
   const contactAvatar = formData.get("contactAvatar");
@@ -57,8 +57,10 @@ export async function deleteContact(formData) {
     },
   });
 
-  const fileKey = contact.avatar.split("/").pop();
-  contact.avatar && (await utapi.deleteFiles(fileKey));
+  if (contact.avatar) {
+    const fileKey = contact.avatar.split("/").pop();
+    await utapi.deleteFiles(fileKey);
+  }
 
   revalidatePath("/");
   return redirect("/");
