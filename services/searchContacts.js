@@ -1,11 +1,11 @@
 import prisma from "@/lib/prismaClient";
 
-export const searchContacts = async (query) => {
+export const searchContacts = async (search) => {
   try {
     return await prisma.contact.findMany({
       where: {
         name: {
-          contains: query,
+          contains: search,
           mode: "insensitive",
         },
       },

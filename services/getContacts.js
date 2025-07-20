@@ -1,9 +1,9 @@
 import prisma from "@/lib/prismaClient";
 
-export const getContacts = async () => {
+export const getContacts = async (cursor) => {
   try {
     return await prisma.contact.findMany({
-      take: 10,
+      take: cursor,
       orderBy: {
         name: "asc",
       },

@@ -5,24 +5,21 @@ import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
 const SearchInput = () => {
-  const searchParams = useSearchParams();
   const router = useRouter();
-  const qValue = searchParams.get("search") || "";
-
-  const [query, setQuery] = useState(qValue);
+  const searchParams = useSearchParams();
+  const searchValue = searchParams.get("search") || "";
+  const [search, setSearch] = useState(searchValue);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      const params = new URLSearchParams();
-      if (query.trim()) {
-        params.set("search", query);
-        router.push(`?${params.toString()}`);
+      if (search.trim()) {
+        router.push(`/?search=${encodeURIComponent(search)}`);
       } else {
         router.replace("/");
       }
     }, 300);
     return () => clearTimeout(timeout);
-  }, [query, router]);
+  }, [search, router]);
 
   return (
     <TextField
@@ -31,9 +28,9 @@ const SearchInput = () => {
       fullWidth
       size="small"
       color="lightgray"
-      value={query}
+      value={search}
       sx={{ backgroundColor: "#e8e6e6" }}
-      onChange={(e) => setQuery(e.target.value)}
+      onChange={(e) => setSearch(e.target.value)}
     />
   );
 };

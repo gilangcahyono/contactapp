@@ -23,7 +23,7 @@ const ContactList = ({ initialContacts: contacts }) => {
   }
 
   return (
-    <List>
+    <List sx={{ marginBottom: "1rem" }}>
       {contacts.map((contact) => (
         <Link
           key={contact.id}

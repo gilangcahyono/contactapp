@@ -1,14 +1,18 @@
 import SearchInput from "@/components/SearchInput";
-import { IconButton, Typography } from "@mui/material";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Link from "next/link";
 import ContactList from "@/components/ContactList";
 import { getContacts } from "@/services/getContacts";
 import { searchContacts } from "@/services/searchContacts";
+import LoadMoreButton from "@/components/LoadMoreButton";
 
 const Page = async ({ searchParams }) => {
-  const query = searchParams?.search || "";
-  let contacts = query ? await searchContacts(query) : await getContacts();
+  const search = searchParams?.search || "";
+  const cursor = searchParams?.cursor || 10;
+  let contacts = search
+    ? await searchContacts(search)
+    : await getContacts(cursor);
 
   return (
     <>
@@ -23,6 +27,7 @@ const Page = async ({ searchParams }) => {
       </Typography>
       <SearchInput />
       <ContactList initialContacts={contacts} />
+      <LoadMoreButton />
       <IconButton
         component={Link}
         href="/contacts/new"
