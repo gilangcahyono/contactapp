@@ -1,24 +1,14 @@
 import SearchInput from "@/components/SearchInput";
-import prisma from "@/lib/prismaClient";
-import { Avatar, Container, IconButton, Typography } from "@mui/material";
+import { IconButton, Typography } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Link from "next/link";
 import ContactList from "@/components/ContactList";
+import { getContacts } from "@/services/getContacts";
+import { searchContacts } from "@/services/searchContacts";
 
 const Page = async ({ searchParams }) => {
   const query = searchParams?.search || "";
-
-  const contacts = await prisma.contact.findMany({
-    where: {
-      name: {
-        contains: query,
-        mode: "insensitive",
-      },
-    },
-    orderBy: {
-      name: "asc",
-    },
-  });
+  let contacts = query ? await searchContacts(query) : await getContacts();
 
   return (
     <>
@@ -32,7 +22,7 @@ const Page = async ({ searchParams }) => {
         Contacts
       </Typography>
       <SearchInput />
-      <ContactList contacts={contacts} />
+      <ContactList initialContacts={contacts} />
       <IconButton
         component={Link}
         href="/contacts/new"

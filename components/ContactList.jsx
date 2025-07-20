@@ -7,7 +7,7 @@ import Avatar from "@mui/material/Avatar";
 import Link from "next/link";
 import { Typography } from "@mui/material";
 
-const ContactList = ({ contacts }) => {
+const ContactList = ({ initialContacts: contacts }) => {
   if (!contacts.length) {
     return (
       <Typography
