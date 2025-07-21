@@ -3,15 +3,11 @@ import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import { Avatar, Box, Typography, Grid, IconButton } from "@mui/material";
 import Link from "next/link";
 import ActionMenu from "@/components/ActionMenu";
-import prisma from "@/lib/prismaClient";
 import { notFound } from "next/navigation";
+import { getContactById } from "@/services/getContactById";
 
 const Page = async ({ params }) => {
-  const contact = await prisma.contact.findUnique({
-    where: {
-      id: Number(params.id),
-    },
-  });
+  const contact = await getContactById(params.id);
 
   if (!contact) {
     return notFound();
