@@ -7,7 +7,6 @@ const ImageUploadBox = (props) => {
   const { avatar } = props;
   const inputId = useId();
   const [imagePreview, setImagePreview] = useState(avatar ? avatar : null);
-  console.log(imagePreview);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];

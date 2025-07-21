@@ -1,28 +1,26 @@
 "use server";
 
+import { storeContact } from "@/services/storeContact";
 import prisma from "../lib/prismaClient";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { UTApi } from "uploadthing/server";
 const utapi = new UTApi();
+import { uploadFile } from "@/services/uploadFile";
 
 export async function createContact(formData) {
-  const contactName = formData.get("contactName");
-  const contactMobile = formData.get("contactMobile");
-  const contactAvatar = formData.get("contactAvatar");
-  let contactAvatarName = null;
+  const contact = {
+    name: formData.get("contactName"),
+    mobile: formData.get("contactMobile"),
+    avatar: formData.get("contactAvatar"),
+  };
 
-  if (contactAvatar.size) {
-    const res = await utapi.uploadFiles(contactAvatar);
-    contactAvatarName = res.data.ufsUrl;
-  }
+  const fileAvatarName = await uploadFile(contact.avatar);
 
-  const contact = await prisma.contact.create({
-    data: {
-      name: contactName,
-      mobile: contactMobile,
-      avatar: contactAvatarName,
-    },
+  await storeContact({
+    name: contact.name,
+    mobile: contact.mobile,
+    avatar: fileAvatarName,
   });
 
   revalidatePath("/");

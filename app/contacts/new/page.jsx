@@ -1,11 +1,4 @@
-import {
-  Avatar,
-  Box,
-  Grid,
-  IconButton,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Grid, IconButton, TextField, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import Link from "next/link";
 import { createContact } from "@/server/actions";

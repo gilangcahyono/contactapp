@@ -9,5 +9,6 @@ export const getContacts = async () => {
     });
   } catch (error) {
     console.error(error);
+    return null;
   }
 };
