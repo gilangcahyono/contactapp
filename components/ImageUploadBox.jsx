@@ -1,12 +1,13 @@
 "use client";
 
-import { Avatar, Box } from "@mui/material";
+import { Avatar } from "@mui/material";
 import { useId, useState } from "react";
 
 const ImageUploadBox = (props) => {
   const { avatar } = props;
+  const inputId = useId();
   const [imagePreview, setImagePreview] = useState(avatar ? avatar : null);
-  const formId = useId();
+  console.log(imagePreview);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -20,22 +21,29 @@ const ImageUploadBox = (props) => {
   };
 
   return (
-    <Box sx={{ textAlign: "center", marginBottom: "40px" }}>
+    <>
+      <Avatar
+        component={"label"}
+        htmlFor={inputId}
+        src={imagePreview}
+        sx={{
+          width: 70,
+          height: 70,
+          marginX: "auto",
+          marginTop: "20px",
+          marginBottom: "40px",
+          cursor: "pointer",
+        }}
+      />
       <input
         type="file"
+        id={inputId}
         name="contactAvatar"
-        id={formId}
         accept="image/*"
         style={{ display: "none" }}
         onChange={handleImageChange}
       />
-      <label htmlFor={formId}>
-        <Avatar
-          src={imagePreview}
-          sx={{ width: 70, height: 70, margin: "20px auto", cursor: "pointer" }}
-        />
-      </label>
-    </Box>
+    </>
   );
 };
 

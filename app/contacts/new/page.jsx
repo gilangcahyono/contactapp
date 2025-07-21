@@ -36,7 +36,11 @@ const Page = () => {
             </Typography>
           </Grid>
           <Grid size={3} textAlign="right">
-            <IconButton color="inherit" as="span">
+            <IconButton
+              color="inherit"
+              as="span"
+              style={{ display: "inline-flex", alignItems: "center" }}
+            >
               <SubmitButton>
                 <CheckIcon />
               </SubmitButton>

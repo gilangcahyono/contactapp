@@ -11,7 +11,7 @@ const SubmitButton = ({ children }) => {
       <button
         type="submit"
         style={{
-          backgroundColor: "inherit",
+          backgroundColor: "transparent",
           border: "none",
           cursor: "pointer",
         }}
