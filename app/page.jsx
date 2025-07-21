@@ -1,5 +1,5 @@
 import SearchInput from "@/components/SearchInput";
-import { Box, Button, IconButton, Typography } from "@mui/material";
+import { IconButton, Typography } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Link from "next/link";
 import ContactList from "@/components/ContactList";

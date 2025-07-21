@@ -1,6 +1,6 @@
 "use client";
 
-import { Backdrop, CircularProgress, IconButton } from "@mui/material";
+import Loading from "@/app/loading";
 import { useFormStatus } from "react-dom";
 
 const SubmitButton = ({ children }) => {
@@ -18,15 +18,7 @@ const SubmitButton = ({ children }) => {
       >
         {children}
       </button>
-      <Backdrop
-        sx={(theme) => ({
-          color: "#fff",
-          zIndex: theme.zIndex.drawer + 1,
-        })}
-        open={pending}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
+      <Loading open={pending} />
     </>
   );
 };

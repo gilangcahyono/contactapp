@@ -1,23 +1,20 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
 # Contact App
 
-Sebuah aplikasi untuk mengelola nomor telepon yang terinspirasi dari aplikasi kontak di android.
+Sebuah aplikasi website untuk mengelola nomor telepon yang terinspirasi dari aplikasi kontak di android.
 
-## Getting Started
+## Link Demo
 
-First, run the development server:
+Aplikasi dapat diakses melalui: [https://contactapp-alpha-pied.vercel.app](https://contactapp-alpha-pied.vercel.app)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Fitur
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- CRUD contact
+- Search contact
+- Upload file foto contact
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Teknologi
+
+- Frontend: React.js + Material UI
+- Backend: Next.js Fullstack dengan Server Action
+- Database: PostgreSQL + Prisma ORM
+- Deployment: Vercel
