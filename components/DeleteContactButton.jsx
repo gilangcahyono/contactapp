@@ -14,6 +14,7 @@ import SubmitButton from "./SubmitButton";
 
 const DeleteContactButton = ({ children, contact }) => {
   const [open, setOpen] = useState(false);
+  const deleteContactWithId = deleteContact.bind(null, contact.id);
 
   return (
     <>
@@ -24,9 +25,7 @@ const DeleteContactButton = ({ children, contact }) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          {"Delete this contact?"}
-        </DialogTitle>
+        <DialogTitle id="alert-dialog-title">Delete this contact?</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             Delete "{contact.name}" from your contacts?
@@ -36,8 +35,8 @@ const DeleteContactButton = ({ children, contact }) => {
           <Button type="button" onClick={() => setOpen(false)} color="error">
             Cancel
           </Button>
-          <form action={deleteContact}>
-            <input type="hidden" name="contactId" value={contact.id} />
+          <form action={deleteContactWithId}>
+            {/* <input type="hidden" name="contactId" value={contact.id} /> */}
             <SubmitButton>
               <Button as="span">Delete</Button>
             </SubmitButton>

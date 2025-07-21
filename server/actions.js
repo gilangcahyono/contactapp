@@ -4,9 +4,8 @@ import { storeContact } from "@/services/storeContact";
 import prisma from "../lib/prismaClient";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { UTApi } from "uploadthing/server";
-const utapi = new UTApi();
 import { uploadFile } from "@/services/uploadFile";
+import { destroyContact } from "@/services/destroyContact";
 
 export async function createContact(formData) {
   const contact = {
@@ -68,17 +67,11 @@ export async function updateContact(formData) {
   return redirect(`/contacts/${contact.id}`);
 }
 
-export async function deleteContact(formData) {
-  const contactId = formData.get("contactId");
+export async function deleteContact(contactId, formData) {
+  const deletedContact = await destroyContact(contactId);
 
-  const contact = await prisma.contact.delete({
-    where: {
-      id: Number(contactId),
-    },
-  });
-
-  if (contact.avatar) {
-    const fileKey = contact.avatar.split("/").pop();
+  if (deletedContact.avatar) {
+    const fileKey = deletedContact.avatar.split("/").pop();
     await utapi.deleteFiles(fileKey);
   }
 
