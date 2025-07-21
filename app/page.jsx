@@ -5,14 +5,10 @@ import Link from "next/link";
 import ContactList from "@/components/ContactList";
 import { getContacts } from "@/services/getContacts";
 import { searchContacts } from "@/services/searchContacts";
-import LoadMoreButton from "@/components/LoadMoreButton";
 
 const Page = async ({ searchParams }) => {
   const search = searchParams?.search || "";
-  const cursor = searchParams?.cursor || 10;
-  let contacts = search
-    ? await searchContacts(search)
-    : await getContacts(cursor);
+  let contacts = search ? await searchContacts(search) : await getContacts();
 
   return (
     <>
@@ -27,7 +23,6 @@ const Page = async ({ searchParams }) => {
       </Typography>
       <SearchInput />
       <ContactList initialContacts={contacts} />
-      <LoadMoreButton />
       <IconButton
         component={Link}
         href="/contacts/new"
