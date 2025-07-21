@@ -36,14 +36,14 @@ const Page = () => {
             </Typography>
           </Grid>
           <Grid size={3} textAlign="right">
-            <IconButton color="inherit" component="span">
+            <IconButton color="inherit" as="span">
               <SubmitButton>
                 <CheckIcon />
               </SubmitButton>
             </IconButton>
           </Grid>
         </Grid>
-        <ImageUploadBox name="contactAvatar" />
+        <ImageUploadBox />
         <TextField
           name="contactName"
           label="Name"

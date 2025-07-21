@@ -17,6 +17,7 @@ import prisma from "@/lib/prismaClient";
 import { notFound } from "next/navigation";
 import SubmitButton from "@/components/SubmitButton";
 import { updateContact } from "@/server/actions";
+import ImageUploadBox from "@/components/ImageUploadBox";
 
 const Page = async ({ params }) => {
   const contact = await prisma.contact.findUnique({
@@ -63,13 +64,7 @@ const Page = async ({ params }) => {
           </Grid>
         </Grid>
 
-        <Box sx={{ textAlign: "center", marginBottom: "40px" }}>
-          <Avatar
-            alt={contact.name}
-            src={contact.avatar || ""}
-            sx={{ width: 70, height: 70, margin: "20px auto" }}
-          />
-        </Box>
+        <ImageUploadBox avatar={contact.avatar} />
 
         <TextField
           label="Name"
