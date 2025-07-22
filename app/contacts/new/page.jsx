@@ -17,11 +17,9 @@ const Page = () => {
           alignItems="center"
         >
           <Grid size={3}>
-            <Link href="/" style={{ textDecoration: "none", color: "inherit" }}>
-              <IconButton color="inherit">
-                <CloseIcon />
-              </IconButton>
-            </Link>
+            <IconButton component={Link} href="/" color="inherit">
+              <CloseIcon />
+            </IconButton>
           </Grid>
           <Grid size={6} textAlign="center">
             <Typography paddingTop="1rem" variant="h6" gutterBottom>

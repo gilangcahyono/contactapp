@@ -36,7 +36,6 @@ const DeleteContactButton = ({ children, contact }) => {
             Cancel
           </Button>
           <form action={deleteContactWithId}>
-            {/* <input type="hidden" name="contactId" value={contact.id} /> */}
             <SubmitButton>
               <Button as="span">Delete</Button>
             </SubmitButton>

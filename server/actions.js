@@ -1,11 +1,13 @@
 "use server";
 
 import { storeContact } from "@/services/storeContact";
-import prisma from "../lib/prismaClient";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { uploadFile } from "@/services/uploadFile";
 import { destroyContact } from "@/services/destroyContact";
+import { getContactById } from "@/services/getContactById";
+import { modifyContact } from "@/services/modifyContact";
+import { deleteFile } from "@/services/deleteFile";
 
 export async function createContact(formData) {
   const contact = {
@@ -27,54 +29,30 @@ export async function createContact(formData) {
 }
 
 export async function updateContact(formData) {
-  const contactId = formData.get("contactId");
-  const contactName = formData.get("contactName");
-  const contactMobile = formData.get("contactMobile");
-  const contactAvatar = formData.get("contactAvatar");
-  let contactAvatarName = null;
+  const contact = {
+    id: formData.get("contactId"),
+    name: formData.get("contactName"),
+    mobile: formData.get("contactMobile"),
+    avatar: formData.get("contactAvatar"),
+  };
 
-  if (contactAvatar.size) {
-    const res = await utapi.uploadFiles(contactAvatar);
-    contactAvatarName = res.data.ufsUrl;
-  }
+  const fileAvatarName = await uploadFile(contact.avatar);
+  const prevContact = await getContactById(contact.id);
+  prevContact.avatar && (await deleteFile(prevContact.avatar));
 
-  const prevContact = await prisma.contact.findUnique({
-    where: {
-      id: Number(contactId),
-    },
-    select: {
-      avatar: true,
-    },
+  const updatedContact = await modifyContact(contact.id, {
+    name: contact.name,
+    mobile: contact.mobile,
+    avatar: contact.avatar.size ? fileAvatarName : prevContact.avatar,
   });
 
-  if (prevContact.avatar) {
-    const fileKey = prevContact.avatar.split("/").pop();
-    const res = await utapi.deleteFiles(fileKey);
-  }
-
-  const contact = await prisma.contact.update({
-    where: {
-      id: Number(contactId),
-    },
-    data: {
-      name: contactName,
-      mobile: contactMobile,
-      avatar: contactAvatar.size ? contactAvatarName : prevContact.avatar,
-    },
-  });
-
-  revalidatePath(`/contacts/${contact.id}`);
-  return redirect(`/contacts/${contact.id}`);
+  revalidatePath(`/contacts/${updatedContact.id}`);
+  return redirect(`/contacts/${updatedContact.id}`);
 }
 
-export async function deleteContact(contactId, formData) {
+export async function deleteContact(contactId) {
   const deletedContact = await destroyContact(contactId);
-
-  if (deletedContact.avatar) {
-    const fileKey = deletedContact.avatar.split("/").pop();
-    await utapi.deleteFiles(fileKey);
-  }
-
+  deletedContact.avatar && (await deleteFile(deletedContact.avatar));
   revalidatePath("/");
   return redirect("/");
 }

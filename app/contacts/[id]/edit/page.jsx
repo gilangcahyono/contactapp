@@ -1,30 +1,17 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Grid,
-  IconButton,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Button, Grid, IconButton, TextField, Typography } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
-
 import Link from "next/link";
 import DeleteContactButton from "@/components/DeleteContactButton";
-import prisma from "@/lib/prismaClient";
 import { notFound } from "next/navigation";
 import SubmitButton from "@/components/SubmitButton";
 import { updateContact } from "@/server/actions";
 import ImageUploadBox from "@/components/ImageUploadBox";
+import { getContactById } from "@/services/getContactById";
 
 const Page = async ({ params }) => {
-  const contact = await prisma.contact.findUnique({
-    where: {
-      id: Number(params.id),
-    },
-  });
+  const contact = await getContactById(params.id);
 
   if (!contact) {
     return notFound();
@@ -41,14 +28,13 @@ const Page = async ({ params }) => {
           alignItems="center"
         >
           <Grid size={3}>
-            <Link
+            <IconButton
+              component={Link}
               href={`/contacts/${params.id}`}
-              style={{ textDecoration: "none", color: "inherit" }}
+              color="inherit"
             >
-              <IconButton color="inherit">
-                <CloseIcon />
-              </IconButton>
-            </Link>
+              <CloseIcon />
+            </IconButton>
           </Grid>
           <Grid size={6} textAlign="center">
             <Typography paddingTop="1rem" variant="h6" gutterBottom>
