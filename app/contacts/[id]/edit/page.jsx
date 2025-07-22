@@ -6,9 +6,9 @@ import Link from "next/link";
 import DeleteContactButton from "@/components/DeleteContactButton";
 import { notFound } from "next/navigation";
 import SubmitButton from "@/components/SubmitButton";
-import { updateContact } from "@/server/actions";
 import ImageUploadBox from "@/components/ImageUploadBox";
 import { getContactById } from "@/services/getContactById";
+import { updateContact } from "@/actions/updateContact";
 
 const Page = async ({ params }) => {
   const contact = await getContactById(params.id);

@@ -1,6 +1,5 @@
 "use client";
 
-import { deleteContact } from "@/server/actions";
 import {
   Button,
   Dialog,
@@ -11,6 +10,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import SubmitButton from "./SubmitButton";
+import { deleteContact } from "@/actions/deleteContact";
 
 const DeleteContactButton = ({ children, contact }) => {
   const [open, setOpen] = useState(false);

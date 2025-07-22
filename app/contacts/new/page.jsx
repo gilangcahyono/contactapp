@@ -1,10 +1,10 @@
 import { Grid, IconButton, TextField, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import Link from "next/link";
-import { createContact } from "@/server/actions";
 import SubmitButton from "@/components/SubmitButton";
 import CheckIcon from "@mui/icons-material/Check";
 import ImageUploadBox from "@/components/ImageUploadBox";
+import { createContact } from "@/actions/createContact";
 
 const Page = () => {
   return (
