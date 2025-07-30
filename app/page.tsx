@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Contact } from "@/types/contact";
 
 const Home = async () => {
-  const res = await fetch(" http://localhost:3000/api/contacts", {
+  const res = await fetch("http://127.0.0.1:8000/api/contacts", {
     cache: "no-cache",
   });
   const data = await res.json();
