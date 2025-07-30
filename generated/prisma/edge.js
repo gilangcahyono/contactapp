@@ -137,7 +137,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "D:\\web-apps\\portfolio\\contactapp\\generated\\prisma",
+      "value": "D:\\skuyliving\\contactapp\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -151,11 +151,11 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "D:\\web-apps\\portfolio\\contactapp\\prisma\\schema.prisma",
+    "sourceFilePath": "D:\\skuyliving\\contactapp\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../.env",
+    "rootEnvPath": null,
     "schemaEnvPath": "../../.env"
   },
   "relativePath": "../../prisma",
@@ -165,7 +165,6 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
