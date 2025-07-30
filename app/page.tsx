@@ -3,13 +3,17 @@ import { Contact } from "@/types/contact";
 import { notFound } from "next/navigation";
 
 const Home = async () => {
-  const res = await fetch(" http://localhost:3000/api/contacts", {
+  const res = await fetch("http://127.0.0.1:8000/api/contacts", {
     cache: "no-cache",
   });
 
+  console.log(res);
+
   const data = await res.json();
+  console.log(data);
+
   if (!data.success) return notFound();
-  const contacts: Contact[] = data.data;
+  const contacts: Contact[] = data.data || [];
 
   return (
     <>
