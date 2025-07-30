@@ -4,9 +4,9 @@ import { NextResponse } from "next/server";
 export const GET = async (): Promise<NextResponse> => {
   try {
     const contacts = await prisma.contact.findMany({
-      take: 10,
+      // take: 10,
       orderBy: {
-        name: "desc",
+        name: "asc",
       },
     });
 
