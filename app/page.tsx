@@ -5,17 +5,18 @@ import LogoutButton from "@/components/LogoutButton";
 
 const Home = async () => {
   const token = await getToken();
-
   const res = await fetch("http://127.0.0.1:8000/api/contacts", {
+    cache: "no-cache",
+    method: "GET",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
       Authorization: `Bearer ${token}`,
-      cache: "no-cache",
     },
   });
-
-  const contacts: Contact[] = await res.json();
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message);
+  const contacts: Contact[] = data;
 
   return (
     <>
@@ -37,14 +38,14 @@ const Home = async () => {
       </Link>
       <br /> <br />
       <ol className="list-inside list-decimal">
-        {contacts.length > 0 ? (
+        {contacts.length === 0 ? (
+          <p className="text-center">No contacts found</p>
+        ) : (
           contacts.map((contact, idx) => (
             <li key={idx}>
               <Link href={`/contacts/${contact.id}`}>{contact.name}</Link>
             </li>
           ))
-        ) : (
-          <p className="text-center">No contacts found</p>
         )}
       </ol>
     </>
