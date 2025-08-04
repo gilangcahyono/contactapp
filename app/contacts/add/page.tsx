@@ -1,5 +1,7 @@
 "use client";
 
+import { getToken } from "@/lib/utils";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -8,19 +10,25 @@ const Page = () => {
   const [loading, setLoading] = useState<boolean>();
   const [error, setError] = useState<string>();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleAdd = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const body = new FormData(event.currentTarget);
     const name = body.get("name");
     const phone = body.get("phone");
+    const token = await getToken();
 
     try {
       setLoading(true);
       setError("");
-      const res = await fetch("http://localhost:3000/api/contacts", {
-        method: "POST",
-        body: JSON.stringify({ name, phone }),
+      const res = await fetch("http://127.0.0.1:8000/api/contacts", {
         cache: "no-cache",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ name, phone }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
@@ -28,6 +36,8 @@ const Page = () => {
     } catch (error) {
       console.error(error);
       setError((error as Error).message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -35,9 +45,16 @@ const Page = () => {
     <>
       <h1 className="text-2xl font-bold text-center">Add Contact</h1>
       <br />
-      {error && <p className="text-red-500">{error}</p>}
+      <ul className="list-disc list-inside">
+        <li>
+          <Link href="/" className="hover:underline">
+            Back
+          </Link>
+        </li>
+      </ul>
+      {error && <p className="text-red-500 text-center">{error}</p>}
       <br />
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleAdd}>
         <div>
           <label htmlFor="name">Name</label>
           <br />
@@ -67,7 +84,7 @@ const Page = () => {
             disabled={loading}
             className="border w-full disabled:cursor-not-allowed"
           >
-            Add
+            {loading ? "Loading..." : "Add"}
           </button>
         </div>
       </form>

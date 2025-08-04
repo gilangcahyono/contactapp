@@ -1,12 +1,24 @@
+import DeleteButton from "@/components/DeleteButton";
+import { getToken } from "@/lib/utils";
 import { Contact } from "@/types/contact";
-import { Params } from "@/types/request";
 import Link from "next/link";
 
-const Page = async ({ params }: Params) => {
+const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
-  const res = await fetch(`http://localhost:3000/api/contacts/${id}`);
+  const token = await getToken();
+
+  const res = await fetch(`http://127.0.0.1:8000/api/contacts/${id}`, {
+    cache: "no-cache",
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
   const data = await res.json();
-  const contact: Contact = data.data;
+  if (!res.ok) throw new Error(data.message);
+  const contact: Contact = data;
 
   return (
     <>
@@ -22,6 +34,9 @@ const Page = async ({ params }: Params) => {
           <Link href={`/contacts/${id}/edit`} className="hover:underline">
             Edit
           </Link>
+        </li>
+        <li>
+          <DeleteButton id={id} />
         </li>
       </ul>
       <br />

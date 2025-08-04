@@ -1,7 +1,9 @@
 "use client";
 
-import { Contact } from "@/types/contact";
+import DeleteButton from "@/components/DeleteButton";
 import Link from "next/link";
+import { getToken } from "@/lib/utils";
+import { Contact } from "@/types/contact";
 import { useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react";
 
@@ -13,47 +15,52 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
   const [error, setError] = useState<string>();
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/contacts/${id}`)
-      .then((res) => res.json())
-      .then((data) => setContact(data.data));
+    getContact(id);
   }, [id]);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const getContact = async (id: string) => {
+    const token = await getToken();
+    try {
+      const res = await fetch(`http://127.0.0.1:8000/api/contacts/${id}`, {
+        cache: "no-cache",
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+      setContact(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
+  const handleEdit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     const body = new FormData(event.currentTarget);
     const name = body.get("name");
     const phone = body.get("phone");
+    const token = await getToken();
 
     try {
       setLoading(true);
       setError("");
-      const res = await fetch(`http://localhost:3000/api/contacts/${id}`, {
-        method: "PUT",
-        body: JSON.stringify({ name, phone }),
+      const res = await fetch(`http://127.0.0.1:8000/api/contacts/${id}`, {
         cache: "no-cache",
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ name, phone }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
       router.push(`/contacts/${id}`);
-    } catch (error) {
-      console.error(error);
-      setError((error as Error).message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDetele = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    try {
-      setLoading(true);
-      setError("");
-      fetch(`http://localhost:3000/api/contacts/${id}`, {
-        method: "DELETE",
-        cache: "no-cache",
-      });
-      router.push("/");
     } catch (error) {
       console.error(error);
       setError((error as Error).message);
@@ -73,14 +80,12 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
           </Link>
         </li>
         <li>
-          <button type="button" disabled={loading} onClick={handleDetele}>
-            Delete
-          </button>
+          <DeleteButton id={id} />
         </li>
       </ul>
-      {error && <p className="text-red-500">{error}</p>}
+      {error && <p className="text-red-500 text-center">{error}</p>}
       <br />
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleEdit}>
         <div>
           <label htmlFor="name">Name</label>
           <br />
