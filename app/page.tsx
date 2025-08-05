@@ -20,24 +20,19 @@ const Home = async () => {
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-center">My Contacts</h1>
-      <br />
-      <ul className="list-disc list-inside">
+      <h1>Contacts</h1>
+      <ul>
         <li>
-          <Link href="/profile" className="hover:underline">
-            Profile
-          </Link>
+          <Link href="/profile">Profile</Link>
         </li>
         <li>
           <LogoutButton />
         </li>
       </ul>
       <br />
-      <Link href="/contacts/add" className="hover:underline">
-        Add Contact
-      </Link>
+      <Link href="/contacts/add">Add Contact</Link>
       <br /> <br />
-      <ol className="list-inside list-decimal">
+      <ol>
         {contacts.length === 0 ? (
           <p className="text-center">No contacts found</p>
         ) : (

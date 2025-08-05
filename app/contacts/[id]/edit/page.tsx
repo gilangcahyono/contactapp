@@ -71,26 +71,23 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-center">Edit Contact</h1>
+      <h1>Edit Contact</h1>
       <br />
-      <ul className="list-disc list-inside">
+      <ul>
         <li>
-          <Link href={`/contacts/${id}`} className="hover:underline">
-            Cancel
-          </Link>
+          <Link href={`/contacts/${id}`}>Cancel</Link>
         </li>
         <li>
           <DeleteButton id={id} />
         </li>
       </ul>
-      {error && <p className="text-red-500 text-center">{error}</p>}
+      {error && <p>{error}</p>}
       <br />
       <form onSubmit={handleEdit}>
         <div>
           <label htmlFor="name">Name</label>
           <br />
           <input
-            className="border w-full"
             type="text"
             name="name"
             defaultValue={contact?.name}
@@ -102,7 +99,6 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
           <label htmlFor="phone">Phone</label>
           <br />
           <input
-            className="border w-full"
             type="text"
             name="phone"
             defaultValue={contact?.phone}
@@ -112,11 +108,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
         </div>
         <div>
           <br />
-          <button
-            type="submit"
-            disabled={loading}
-            className="border w-full disabled:cursor-not-allowed"
-          >
+          <button type="submit" disabled={loading}>
             Save
           </button>
         </div>

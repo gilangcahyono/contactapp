@@ -43,34 +43,25 @@ const Page = () => {
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-center">Add Contact</h1>
+      <h1>Add Contact</h1>
       <br />
-      <ul className="list-disc list-inside">
+      <ul>
         <li>
-          <Link href="/" className="hover:underline">
-            Back
-          </Link>
+          <Link href="/">Back</Link>
         </li>
       </ul>
-      {error && <p className="text-red-500 text-center">{error}</p>}
+      {error && <p>{error}</p>}
       <br />
       <form onSubmit={handleAdd}>
         <div>
           <label htmlFor="name">Name</label>
           <br />
-          <input
-            className="border w-full"
-            type="text"
-            name="name"
-            id="name"
-            placeholder="John Doe"
-          />
+          <input type="text" name="name" id="name" placeholder="John Doe" />
         </div>
         <div>
           <label htmlFor="phone">Phone</label>
           <br />
           <input
-            className="border w-full"
             type="text"
             name="phone"
             id="phone"
@@ -79,11 +70,7 @@ const Page = () => {
         </div>
         <div>
           <br />
-          <button
-            type="submit"
-            disabled={loading}
-            className="border w-full disabled:cursor-not-allowed"
-          >
+          <button type="submit" disabled={loading}>
             {loading ? "Loading..." : "Add"}
           </button>
         </div>

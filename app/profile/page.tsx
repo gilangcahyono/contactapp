@@ -13,18 +13,15 @@ const Page = async () => {
       Authorization: `Bearer ${token}`,
     },
   });
-
   const user = await res.json();
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-center">My Profile</h1>
+      <h1>My Profile</h1>
       <br />
-      <ul className="list-disc list-inside">
+      <ul>
         <li>
-          <Link href="/" className="hover:underline">
-            Back
-          </Link>
+          <Link href="/">Back</Link>
         </li>
       </ul>
       <br />

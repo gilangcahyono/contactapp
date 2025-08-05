@@ -4,15 +4,23 @@ import { getToken } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const DeleteButton = ({ id }: { id: string }) => {
+type Props = { id: string } & React.ButtonHTMLAttributes<HTMLButtonElement>;
+
+const DeleteButton = (props: Props) => {
+  const { id: contactId, ...rest } = props;
   const [loading, setLoading] = useState<boolean>();
   const router = useRouter();
 
   const handleDetele = async () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+    return;
     const token = await getToken();
     try {
       setLoading(true);
-      fetch(`http://127.0.0.1:8000/api/contacts/${id}`, {
+      fetch(`http://127.0.0.1:8000/api/contacts/${contactId}`, {
         cache: "no-cache",
         method: "DELETE",
         headers: {
@@ -28,15 +36,13 @@ const DeleteButton = ({ id }: { id: string }) => {
       setLoading(false);
     }
   };
+
   return (
-    <button
-      type="button"
-      disabled={loading}
-      onClick={handleDetele}
-      className="cursor-pointer disabled:cursor-not-allowed"
-    >
-      {loading ? "Loading..." : "Delete"}
-    </button>
+    <>
+      <button type="button" {...rest} disabled={loading} onClick={handleDetele}>
+        {loading ? "Loading..." : "Delete"}
+      </button>
+    </>
   );
 };
 

@@ -22,18 +22,14 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-center">Contact Details</h1>
+      <h1>Contact Details</h1>
       <br />
-      <ul className="list-disc list-inside">
+      <ul>
         <li>
-          <Link href="/" className="hover:underline">
-            Back
-          </Link>
+          <Link href="/">Back</Link>
         </li>
         <li>
-          <Link href={`/contacts/${id}/edit`} className="hover:underline">
-            Edit
-          </Link>
+          <Link href={`/contacts/${id}/edit`}>Edit</Link>
         </li>
         <li>
           <DeleteButton id={id} />
