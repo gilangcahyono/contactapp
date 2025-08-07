@@ -5,7 +5,7 @@ import LogoutButton from "@/components/LogoutButton";
 
 const Home = async () => {
   const token = await getToken();
-  const res = await fetch("http://127.0.0.1:8000/api/contacts", {
+  const response = await fetch("http://127.0.0.1:8000/api/contacts", {
     cache: "no-cache",
     method: "GET",
     headers: {
@@ -14,9 +14,9 @@ const Home = async () => {
       Authorization: `Bearer ${token}`,
     },
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message);
-  const contacts: Contact[] = data;
+  const result = await response.json();
+  if (!response.ok) throw new Error(result.message);
+  const contacts: Contact[] = result;
 
   return (
     <>

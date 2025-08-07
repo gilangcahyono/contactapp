@@ -1,10 +1,11 @@
 import { getToken } from "@/lib/utils";
+import { User } from "@/types/user";
 import Link from "next/link";
 import React from "react";
 
 const Page = async () => {
   const token = await getToken();
-  const res = await fetch("http://127.0.0.1:8000/api/user", {
+  const response = await fetch("http://127.0.0.1:8000/api/user", {
     cache: "no-cache",
     method: "GET",
     headers: {
@@ -13,8 +14,8 @@ const Page = async () => {
       Authorization: `Bearer ${token}`,
     },
   });
-  const user = await res.json();
-
+  const result = await response.json();
+  const user: User = result.data;
   return (
     <>
       <h1>My Profile</h1>
