@@ -1,49 +1,37 @@
-import Link from "next/link";
 import { Contact } from "@/types/contact";
 import { getToken } from "@/lib/utils";
-import LogoutButton from "@/components/LogoutButton";
+import axios from "@/lib/axios";
+import SearchInput from "@/components/SearchInput";
+import ProductList from "@/components/ProductList";
+import AddContactButton from "@/components/AddContactButton";
+import Header from "@/components/Header";
+import InvisibleButton from "@/components/icons/InvisibleButton";
+import DropdownMenu from "@/components/DropdownMenu";
 
 const Home = async () => {
   const token = await getToken();
-  const response = await fetch("http://127.0.0.1:8000/api/contacts", {
-    cache: "no-cache",
-    method: "GET",
+  const res = await axios.get("/contacts", {
     headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
       Authorization: `Bearer ${token}`,
     },
   });
-  const result = await response.json();
-  if (!response.ok) throw new Error(result.message);
-  const contacts: Contact[] = result;
+  const contacts: Contact[] = res.data.data;
 
   return (
-    <>
-      <h1>Contacts</h1>
-      <ul>
-        <li>
-          <Link href="/profile">Profile</Link>
-        </li>
-        <li>
-          <LogoutButton />
-        </li>
-      </ul>
-      <br />
-      <Link href="/contacts/add">Add Contact</Link>
-      <br /> <br />
-      <ol>
-        {contacts.length === 0 ? (
-          <p className="text-center">No contacts found</p>
-        ) : (
-          contacts.map((contact, idx) => (
-            <li key={idx}>
-              <Link href={`/contacts/${contact.id}`}>{contact.name}</Link>
-            </li>
-          ))
-        )}
-      </ol>
-    </>
+    <div className="px-4">
+      <Header>
+        <Header.Back>
+          <InvisibleButton />
+        </Header.Back>
+        <Header.Title>Contacts</Header.Title>
+        <Header.Actions>
+          <DropdownMenu />
+        </Header.Actions>
+      </Header>
+      <SearchInput />
+      <ProductList contacts={contacts} />
+      <AddContactButton />
+    </div>
   );
 };
 
