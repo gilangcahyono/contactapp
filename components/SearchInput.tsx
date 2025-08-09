@@ -1,14 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import MagnifyingGlassIcon from "./icons/MagnifyingGlassIcon";
 import XMarkIcon from "./icons/XMarkIcon";
+import { useEffect, useState } from "react";
 
 const SearchInput = () => {
-  const [input, setInput] = useState<string>("");
+  const searchParams = useSearchParams();
+  const search = searchParams.get("search");
+  const router = useRouter();
+  const [input, setInput] = useState<string>(search || "");
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInput(event.target.value);
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (input.trim()) {
+        router.push(`/?search=${encodeURIComponent(input)}`);
+      } else {
+        router.replace("/");
+      }
+    }, 300);
+
+    return () => clearTimeout(timeout);
+  }, [router, input]);
+
+  const clearSearch = () => {
+    setInput("");
+    router.replace("/");
   };
 
   return (
@@ -18,16 +35,13 @@ const SearchInput = () => {
         type="text"
         placeholder="Search contacts"
         value={input}
-        onChange={handleChange}
-        className={`${
-          input && "peer"
-        } w-full focus:outline-none placeholder:font-semibold`}
+        onChange={(e) => setInput(e.target.value)}
+        className={"w-full focus:outline-none placeholder:font-semibold"}
       />
-
       <button
         type="button"
-        onClick={() => setInput("")}
-        className="opacity-0 peer-focus:opacity-100 cursor-pointer"
+        onClick={clearSearch}
+        className={`${input && "opacity-100 cursor-pointer"} opacity-0`}
       >
         <XMarkIcon />
       </button>

@@ -4,10 +4,16 @@ import React from "react";
 
 const ProductList: React.FC<{ contacts: Contact[] }> = (props) => {
   const { contacts } = props;
+
+  if (!contacts.length) {
+    return <p className="text-center">No contacts found</p>;
+  }
+
   return contacts.map((contact: Contact, idx: number) => (
     <Link
       href={`/contacts/${contact.id}`}
       key={idx}
+      scroll={false}
       className="mb-2 flex gap-2 items-center py-2 px-4 hover:bg-gray-200"
     >
       <figure className="w-9 h-9">

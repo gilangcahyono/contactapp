@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import BackDrop from "@/components/BackDrop";
 import axios from "@/lib/axios";
 import { setToken } from "@/lib/utils";
 import { Errors } from "@/types/login";
@@ -52,7 +53,7 @@ const Page: React.FC = () => {
       });
       const token = res.data.data.token;
       await setToken(token);
-      router.push("/");
+      router.push("/", { scroll: false });
     } catch (error: any) {
       console.error(error);
       if (error.response && (error.status === 400 || error.status === 401)) {
@@ -75,7 +76,7 @@ const Page: React.FC = () => {
   };
 
   return (
-    <>
+    <div className="px-4">
       <h1 className="text-2xl font-bold text-center">Login</h1>
       {errors?.server && (
         <p className="text-red-500 text-center">
@@ -124,7 +125,8 @@ const Page: React.FC = () => {
           Register
         </Link>
       </p>
-    </>
+      <BackDrop open={loading!} />
+    </div>
   );
 };
 

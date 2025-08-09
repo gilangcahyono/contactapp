@@ -1,119 +1,70 @@
-"use client";
-
-import DeleteButton from "@/components/DeleteButton";
 import Link from "next/link";
 import { getToken } from "@/lib/utils";
+import Header from "@/components/Header";
+import axios from "@/lib/axios";
+import EditForm from "@/components/EditForm";
 import { Contact } from "@/types/contact";
-import { useRouter } from "next/navigation";
-import { use, useEffect, useState } from "react";
+import SubmitIconButton from "@/components/SubmitIconButton";
 
-const Page = ({ params }: { params: Promise<{ id: string }> }) => {
-  const { id } = use(params);
-  const router = useRouter();
-  const [contact, setContact] = useState<Contact>();
-  const [loading, setLoading] = useState<boolean>();
-  const [error, setError] = useState<string>();
-
-  useEffect(() => {
-    getContact(id);
-  }, [id]);
-
-  const getContact = async (id: string) => {
-    const token = await getToken();
-    try {
-      const res = await fetch(`http://127.0.0.1:8000/api/contacts/${id}`, {
-        cache: "no-cache",
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message);
-      setContact(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleEdit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const body = new FormData(event.currentTarget);
-    const name = body.get("name");
-    const phone = body.get("phone");
-    const token = await getToken();
-
-    try {
-      setLoading(true);
-      setError("");
-      const res = await fetch(`http://127.0.0.1:8000/api/contacts/${id}`, {
-        cache: "no-cache",
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ name, phone }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message);
-      router.push(`/contacts/${id}`);
-    } catch (error) {
-      console.error(error);
-      setError((error as Error).message);
-    } finally {
-      setLoading(false);
-    }
-  };
+const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = await params;
+  const token = await getToken();
+  const res = await axios.get(`/contacts/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  const contact: Contact = res.data.data;
 
   return (
-    <>
-      <h1>Edit Contact</h1>
-      <br />
-      <ul>
-        <li>
-          <Link href={`/contacts/${id}`}>Cancel</Link>
-        </li>
-        <li>
-          <DeleteButton id={id} />
-        </li>
-      </ul>
-      {error && <p>{error}</p>}
-      <br />
-      <form onSubmit={handleEdit}>
-        <div>
-          <label htmlFor="name">Name</label>
-          <br />
-          <input
-            type="text"
-            name="name"
-            defaultValue={contact?.name}
-            id="name"
-            placeholder="John Doe"
+    <div className="px-4">
+      <Header>
+        <Header.Back>
+          <Link href={`/contacts/${id}`} scroll={false}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18 18 6M6 6l12 12"
+              />
+            </svg>
+          </Link>
+        </Header.Back>
+        <Header.Title>Edit Contact</Header.Title>
+        <Header.Actions>
+          <SubmitIconButton form="edit-contact-form" />
+        </Header.Actions>
+      </Header>
+
+      <EditForm contact={contact} />
+
+      <p className="text-sm text-gray-500 ml-3 mb-2">More</p>
+
+      <div className="bg-white rounded-2xl px-3 py-3 flex items-center justify-between">
+        <p className="text-red-500 font-semibold">Delete this contact</p>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="size-6 text-gray-500"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="m8.25 4.5 7.5 7.5-7.5 7.5"
           />
-        </div>
-        <div>
-          <label htmlFor="phone">Phone</label>
-          <br />
-          <input
-            type="text"
-            name="phone"
-            defaultValue={contact?.phone}
-            id="phone"
-            placeholder="08123456789"
-          />
-        </div>
-        <div>
-          <br />
-          <button type="submit" disabled={loading}>
-            Save
-          </button>
-        </div>
-      </form>
-    </>
+        </svg>
+      </div>
+    </div>
   );
 };
 
