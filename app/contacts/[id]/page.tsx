@@ -9,8 +9,14 @@ import Menu from "@/components/Dropdown/Menu";
 import Item from "@/components/Dropdown/Menu/Item";
 import ElipsHorizontalIcon from "@/components/icons/ElipsHorizontalIcon";
 import DeleteButton from "@/components/DeleteButton";
+import Modal, { Action } from "@/components/Modal";
+import { Body, Title } from "@/components/Modal";
 
-const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
+type Props = {
+  params: Promise<{ id: string }>;
+};
+
+const Page: React.FC<Props> = async ({ params }) => {
   const { id } = await params;
   const token = await getToken();
   const res = await axios.get(`/contacts/${id}`, {
@@ -97,7 +103,7 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
           <p>{contact.phone}</p>
           <span className="text-gray-500 text-sm">Mobile</span>
         </div>
-        <a href={`https://wa.me/62${contact.phone}`} target="_blank">
+        <a href={`https://wa.me/62${contact.phone.slice(1)}`} target="_blank">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -134,6 +140,27 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
           />
         </svg>
       </div>
+
+      <Modal>
+        <Title>Delete this contact?</Title>
+        <Body>sfsdfds</Body>
+        <Action>
+          <div className="flex justify-end gap-2">
+            <button
+              type="button"
+              className="bg-gray-100 py-2 px-5 rounded-xl hover:bg-gray-200 active:bg-gray-300"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              className="text-white bg-cyan-500 py-2 px-5 rounded-xl hover:bg-cyan-600 active:bg-cyan-700"
+            >
+              Delete
+            </button>
+          </div>
+        </Action>
+      </Modal>
     </div>
   );
 };
