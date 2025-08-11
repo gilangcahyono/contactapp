@@ -1,6 +1,6 @@
 import CheckIcon from "./icons/CheckIcon";
 
-const SubmitIconButton = ({ form }: { form: string }) => {
+const SubmitIconButton: React.FC<{ form: string }> = ({ form }) => {
   return (
     <button type="submit" form={form} className="cursor-pointer">
       <CheckIcon />

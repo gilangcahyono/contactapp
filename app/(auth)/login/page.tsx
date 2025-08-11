@@ -1,14 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import { setToken } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import BackDrop from "@/components/BackDrop";
 import axios from "@/lib/axios";
-import { setToken } from "@/lib/utils";
-import { Errors } from "@/types/login";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 import * as z from "zod";
+import Header from "@/components/Header";
 
 const loginSchema = z.object({
   email: z
@@ -22,110 +24,107 @@ const loginSchema = z.object({
     .min(3, "Password must be at least 3 characters"),
 });
 
+type FormData = z.infer<typeof loginSchema>;
+
 const Page: React.FC = () => {
   const router = useRouter();
-  const [loading, setLoading] = useState<boolean>();
-  const [errors, setErrors] = useState<Errors>();
+  const [serverError, setServerError] = useState<string | null>(null);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const body = new FormData(event.currentTarget);
-    const email = body.get("email")?.toString() || "";
-    const password = body.get("password")?.toString() || "";
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setError,
+  } = useForm<FormData>({
+    resolver: zodResolver(loginSchema),
+  });
 
-    const result = loginSchema.safeParse({ email, password });
-    if (!result.success) {
-      return setErrors({
-        email: result.error.format().email?._errors[0],
-        password: result.error.format().password?._errors[0],
-      });
-    }
-
+  const onSubmit = async (data: FormData) => {
     try {
-      setLoading(true);
-      setErrors({
-        email: "",
-        password: "",
-      });
-      const res = await axios.post("/login", {
-        email,
-        password,
-      });
+      setServerError(null);
+      const res = await axios.post("/login", data);
       const token = res.data.data.token;
       await setToken(token);
       router.push("/", { scroll: false });
     } catch (error: any) {
-      console.error(error);
-      if (error.response && (error.status === 400 || error.status === 401)) {
-        setErrors({
-          email:
-            error.response.data.errors.email &&
-            error.response.data.errors.email[0],
-          password:
-            error.response.data.errors.password &&
-            error.response.data.errors.password[0],
-        });
+      // console.error(error);
+      if (error.response && (error.status >= 400 || error.status < 500)) {
+        const errors = error.response.data.errors;
+        if (errors && typeof errors === "object") {
+          Object.entries(errors).forEach(([field, messages]) => {
+            if (Array.isArray(messages) && typeof messages[0] === "string") {
+              setError(field as keyof FormData, {
+                type: "server",
+                message: messages[0],
+              });
+            }
+          });
+        }
       } else {
-        setErrors({
-          server: error.response.data.message,
-        });
+        setServerError(error.message || "Internal Server Error");
       }
-    } finally {
-      setLoading(false);
     }
   };
 
   return (
     <div className="px-4">
-      <h1 className="text-2xl font-bold text-center">Login</h1>
-      {errors?.server && (
-        <p className="text-red-500 text-center">
-          {" "}
-          Login failed {errors.server}
+      <Header>
+        <Header.Title>Login to your account</Header.Title>
+      </Header>
+
+      {serverError && (
+        <p className="text-pink-500 text-center mb-5">
+          Login failed {serverError}
         </p>
       )}
-      <form onSubmit={handleSubmit} noValidate>
-        <div>
-          <label htmlFor="email">Email</label>
+
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="mb-3">
           <input
             type="email"
-            name="email"
-            id="email"
-            readOnly={loading}
-            onChange={() => setErrors({ ...errors, email: "" })}
-            className="w-full border"
+            {...register("email")}
+            placeholder="Email"
+            className={`bg-white w-full rounded-xl p-3 focus:outline-cyan-500 ${
+              errors.email && "border-2 focus:outline-pink-500 border-pink-500"
+            }`}
           />
-          {errors?.email && <p className="text-red-500">{errors.email}</p>}
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            readOnly={loading}
-            onChange={() => setErrors({ ...errors, password: "" })}
-            className="w-full border"
-          />
-          {errors?.password && (
-            <p className="text-red-500">{errors.password}</p>
+          {errors.email && (
+            <span className="text-pink-500 text-sm">
+              {errors.email.message}
+            </span>
           )}
         </div>
-        <button
-          disabled={loading}
-          type="submit"
-          className="w-full border mt-10 cursor-pointer disabled:cursor-not-allowed"
-        >
-          {loading ? "Loading..." : "Login"}
-        </button>
+        <div className="mb-3">
+          <input
+            type="password"
+            {...register("password")}
+            placeholder="Password"
+            className={`bg-white w-full rounded-xl p-3 focus:outline-cyan-500 ${
+              errors.password &&
+              "border-2 focus:outline-pink-500 border-pink-500"
+            }`}
+          />
+          {errors.password && (
+            <span className="text-pink-500 text-sm">
+              {errors.password.message}
+            </span>
+          )}
+        </div>
+        <div className="mb-3">
+          <button className="w-full bg-cyan-500 text-white py-3 rounded-xl hover:bg-cyan-600 active:bg-cyan-700">
+            {isSubmitting ? "Logging in..." : "Login"}
+          </button>
+        </div>
       </form>
-      <p className="text-center mt-10">
-        Don&apos;t have an account?{" "}
-        <Link href="/register" className="text-blue-500">
+
+      <p className="text-center mt-3">
+        Don&apos;t have an account ?{" "}
+        <Link href="/register" className="text-cyan-500">
           Register
         </Link>
       </p>
-      <BackDrop open={loading!} />
+
+      <BackDrop open={isSubmitting} />
     </div>
   );
 };

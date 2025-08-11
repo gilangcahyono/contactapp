@@ -3,95 +3,70 @@
 
 import BackDrop from "@/components/BackDrop";
 import Header from "@/components/Header";
-import CheckIcon from "@/components/icons/CheckIcon";
 import SubmitIconButton from "@/components/SubmitIconButton";
 import Toast from "@/components/Toast";
+import Link from "next/link";
 import axios from "@/lib/axios";
 import { getToken } from "@/lib/utils";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import * as z from "zod";
-
-interface Errors {
-  name?: string;
-  phone?: string;
-  server?: string;
-}
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const addContactSchema = z.object({
   name: z
     .string("Name must be a string")
     .nonempty("Name is required")
     .max(50, "Name is too long"),
-  phone: z.coerce
-    .number("Phone must be a number")
-    .min(1, "Phone is required")
-    .max(9999999999999, "Phone is too long"),
+  phone: z
+    .string("Phone must be a number")
+    .nonempty("Phone is required")
+    .max(15, "Phone is too long")
+    .regex(/^[0-9]+$/, "Phone must be a number"),
 });
+
+type FormData = z.infer<typeof addContactSchema>;
 
 const Page: React.FC = () => {
   const router = useRouter();
-  const [loading, setLoading] = useState<boolean>(false);
-  const [errors, setErrors] = useState<Errors>({
-    name: "",
-    phone: "",
-    server: "",
+  const [serverError, setServerError] = useState<string | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting, isSubmitSuccessful },
+    setError,
+  } = useForm<FormData>({
+    resolver: zodResolver(addContactSchema),
   });
 
-  const handleAdd = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const body = new FormData(event.currentTarget);
-    const name = body.get("name")?.toString() || "";
-    const phone = body.get("phone")?.toString() || "";
-    const token = await getToken();
-    setErrors({
-      name: "",
-      phone: "",
-      server: "",
-    });
-
-    const result = addContactSchema.safeParse({ name, phone });
-    if (!result.success) {
-      return setErrors({
-        name: result.error.format().name?._errors[0],
-        phone: result.error.format().phone?._errors[0],
-      });
-    }
-
+  const onSubmit = async (data: FormData) => {
     try {
-      setLoading(true);
-      await axios.post(
-        "/contacts",
-        {
-          name,
-          phone,
+      const token = await getToken();
+      await axios.post("/contacts", data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      });
       router.push("/", { scroll: false });
     } catch (error: any) {
-      console.error(error); // hati hati jangan lupa dihapus
-      if (error.response && (error.status === 400 || error.status === 401)) {
-        setErrors({
-          name:
-            error.response.data.errors.name &&
-            error.response.data.errors.name[0],
-          phone:
-            error.response.data.errors.phone &&
-            error.response.data.errors.phone[0],
-        });
+      // console.error(error);
+      if (error.response && (error.status >= 400 || error.status < 500)) {
+        const errors = error.response.data.errors;
+        if (errors && typeof errors === "object") {
+          Object.entries(errors).forEach(([field, messages]) => {
+            if (Array.isArray(messages) && typeof messages[0] === "string") {
+              setError(field as keyof FormData, {
+                type: "server",
+                message: messages[0],
+              });
+            }
+          });
+        }
       } else {
-        setErrors({
-          server: error.response.data.message,
-        });
+        setServerError("Internal Server Error");
       }
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -122,7 +97,13 @@ const Page: React.FC = () => {
         </Header.Actions>
       </Header>
 
-      <form id="add-contact-form" onSubmit={handleAdd}>
+      {serverError && (
+        <p className="text-pink-500 text-center mb-5">
+          Can&apos;t add contact now. {serverError}
+        </p>
+      )}
+
+      <form id="add-contact-form" onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-5">
           <div className="w-20 h-20 mx-auto">
             <svg
@@ -144,30 +125,35 @@ const Page: React.FC = () => {
         <div className="mb-3">
           <input
             type="text"
-            name="name"
+            {...register("name")}
             placeholder="Name"
-            onChange={() => setErrors({ ...errors, name: "" })}
             className={`bg-white w-full rounded-xl p-3 focus:outline-cyan-500 ${
-              errors?.name ? "border-2 border-pink-500" : ""
+              errors.name && "border-2 focus:outline-pink-500 border-pink-500"
             }`}
           />
-          <span className="text-pink-500 text-sm">{errors?.name}</span>
+          {errors.name && (
+            <span className="text-pink-500 text-sm">{errors.name.message}</span>
+          )}
         </div>
         <div className="mb-3">
           <input
             type="tel"
-            name="phone"
+            {...register("phone")}
             placeholder="Phone"
-            onChange={() => setErrors({ ...errors, phone: "" })}
             className={`bg-white w-full rounded-xl p-3 focus:outline-cyan-500 ${
-              errors?.phone ? "border-2 border-pink-500" : ""
+              errors.phone && "border-2 focus:outline-pink-500 border-pink-500"
             }`}
           />
-          <span className="text-pink-500 text-sm">{errors?.phone}</span>
+          {errors.phone && (
+            <span className="text-pink-500 text-sm">
+              {errors.phone.message}
+            </span>
+          )}
         </div>
       </form>
-      <BackDrop open={loading} />
-      <Toast title="Contact saved" open={loading} />
+
+      <BackDrop open={isSubmitting} />
+      <Toast title="Contact saved" open={isSubmitSuccessful} />
     </div>
   );
 };

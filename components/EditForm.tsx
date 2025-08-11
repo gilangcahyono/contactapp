@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { getToken } from "@/lib/utils";
@@ -7,87 +8,75 @@ import { useState } from "react";
 import BackDrop from "./BackDrop";
 import axios from "@/lib/axios";
 import * as z from "zod";
-
-interface Errors {
-  name?: string;
-  phone?: string;
-  server?: string;
-}
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Toast from "./Toast";
 
 const editContactSchema = z.object({
   name: z
     .string("Name must be a string")
     .nonempty("Name is required")
     .max(50, "Name is too long"),
-  phone: z.coerce
-    .number("Phone must be a number")
-    .min(1, "Phone is required")
-    .max(9999999999999, "Phone is too long"),
+  phone: z
+    .string("Phone must be a number")
+    .nonempty("Phone is required")
+    .max(15, "Phone is too long")
+    .regex(/^[0-9]+$/, "Phone must be a number"),
 });
+
+type FormData = z.infer<typeof editContactSchema>;
 
 const EditForm = ({ contact }: { contact: Contact }) => {
   const router = useRouter();
-  const [name, setName] = useState<string>(contact.name);
-  const [phone, setPhone] = useState<string>(contact.phone);
-  const [loading, setLoading] = useState<boolean>();
-  const [errors, setErrors] = useState<Errors>();
+  const [serverError, setServerError] = useState<string | null>(null);
 
-  const handleEdit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const token = await getToken();
-    setErrors({
-      name: "",
-      phone: "",
-      server: "",
-    });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting, isSubmitSuccessful },
+    setError,
+  } = useForm<FormData>({
+    resolver: zodResolver(editContactSchema),
+  });
 
-    const result = editContactSchema.safeParse({
-      name,
-      phone,
-    });
-
-    if (!result.success) {
-      return setErrors({
-        name: result.error.format().name?._errors[0],
-        phone: result.error.format().phone?._errors[0],
-      });
-    }
-
+  const onSubmit = async (data: FormData) => {
     try {
-      setLoading(true);
-      await axios.put(
-        `/contacts/${contact.id}`,
-        {
-          name,
-          phone,
+      const token = await getToken();
+      await axios.put(`/contacts/${contact.id}`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      });
       router.push(`/contacts/${contact.id}`, { scroll: false });
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-    } finally {
-      setLoading(false);
+      if (error.response && (error.status >= 400 || error.status < 500)) {
+        const errors = error.response.data.errors;
+        if (errors && typeof errors === "object") {
+          Object.entries(errors).forEach(([field, messages]) => {
+            if (Array.isArray(messages) && typeof messages[0] === "string") {
+              setError(field as keyof FormData, {
+                type: "server",
+                message: messages[0],
+              });
+            }
+          });
+        }
+      } else {
+        setServerError("Internal Server Error");
+      }
     }
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.name === "name") {
-      setName(event.target.value);
-      setErrors({ ...errors, name: "" });
-    }
-    if (event.target.name === "phone") {
-      setPhone(event.target.value);
-      setErrors({ ...errors, phone: "" });
-    }
-  };
   return (
     <>
-      <form id="edit-contact-form" onSubmit={handleEdit}>
+      {serverError && (
+        <p className="text-pink-500 text-center mb-5">
+          Can&apos;t edit contact now. {serverError}
+        </p>
+      )}
+
+      <form id="edit-contact-form" onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-5">
           <div className="w-20 h-20 mx-auto">
             <svg
@@ -109,31 +98,37 @@ const EditForm = ({ contact }: { contact: Contact }) => {
         <div className="mb-3">
           <input
             type="text"
-            name="name"
-            placeholder="Name"
+            {...register("name")}
             defaultValue={contact.name}
-            onChange={handleChange}
+            placeholder="Name"
             className={`bg-white w-full rounded-xl p-3 focus:outline-cyan-500 ${
-              errors?.name ? "border-2 border-pink-500" : ""
+              errors.name && "border-2 focus:outline-pink-500 border-pink-500"
             }`}
           />
-          <span className="text-pink-500 text-sm">{errors?.name}</span>
+          {errors.name && (
+            <span className="text-pink-500 text-sm">{errors.name.message}</span>
+          )}
         </div>
         <div className="mb-3">
           <input
             type="tel"
-            name="phone"
+            {...register("phone")}
             defaultValue={contact.phone}
             placeholder="Phone"
-            onChange={handleChange}
             className={`bg-white w-full rounded-xl p-3 focus:outline-cyan-500 ${
-              errors?.phone ? "border-2 border-pink-500" : ""
+              errors.phone && "border-2 focus:outline-pink-500 border-pink-500"
             }`}
           />
-          <span className="text-pink-500 text-sm">{errors?.phone}</span>
+          {errors.phone && (
+            <span className="text-pink-500 text-sm">
+              {errors.phone.message}
+            </span>
+          )}
         </div>
       </form>
-      <BackDrop open={loading!} />
+
+      <BackDrop open={isSubmitting} />
+      <Toast title="Contact saved" open={isSubmitSuccessful} />
     </>
   );
 };
