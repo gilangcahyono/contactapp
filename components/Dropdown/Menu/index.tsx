@@ -2,11 +2,12 @@
 
 const Menu = ({ children }: { children: React.ReactNode }) => {
   const toggle = () => {
-    const menu = document.getElementById("dropdown-menu");
-    menu?.classList.toggle("hidden");
-    const backdrop = document.getElementById("dropdown-backdrop");
-    backdrop?.classList.toggle("hidden");
+    const dropdownMenu = document.getElementById("dropdown-menu");
+    dropdownMenu?.classList.toggle("hidden");
+    const dropdownBackdrop = document.getElementById("dropdown-backdrop");
+    dropdownBackdrop?.classList.toggle("hidden");
   };
+
   return (
     <>
       <div

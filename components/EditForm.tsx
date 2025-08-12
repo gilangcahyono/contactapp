@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { getToken } from "@/lib/utils";
-import { useRouter } from "next/navigation";
-import { Contact } from "@/types/contact";
-import { useState } from "react";
-import BackDrop from "./BackDrop";
 import axios from "@/lib/axios";
-import * as z from "zod";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { getToken } from "@/lib/utils";
+import { useState } from "react";
+import { Contact } from "@/types/contact";
+import { useForm } from "react-hook-form";
+import BackDrop from "./BackDrop";
 import Toast from "./Toast";
+import * as z from "zod";
 
 const editContactSchema = z.object({
   name: z
@@ -47,9 +47,11 @@ const EditForm = ({ contact }: { contact: Contact }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      router.push(`/contacts/${contact.id}`, { scroll: false });
+      setTimeout(() => {
+        router.push(`/contacts/${contact.id}`, { scroll: false });
+      }, 500);
     } catch (error: any) {
-      console.error(error);
+      // console.error(error);
       if (error.response && (error.status >= 400 || error.status < 500)) {
         const errors = error.response.data.errors;
         if (errors && typeof errors === "object") {

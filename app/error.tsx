@@ -14,11 +14,18 @@ export default function Error({
   }, [error]);
 
   return (
-    <div>
-      <h2>Something went wrong!</h2>
-      {/* <p>{error.message}</p> */}
-      <p>Internal Server Error</p>
-      <button onClick={() => reset()}>Try again</button>
+    <div className="h-screen flex justify-center items-center flex-col gap-3">
+      <h1 className="text-5xl font-bold text-pink-500">500</h1>
+      <h2 className="text-2xl font-semibold">Internal Server Error</h2>
+      <p className="text-center">
+        We apologize for the inconvenience. Please try again later.
+      </p>
+      <button
+        onClick={() => reset()}
+        className="bg-cyan-500 text-white py-3 px-4 rounded-xl hover:bg-cyan-600 active:bg-cyan-700"
+      >
+        Try again
+      </button>
     </div>
   );
 }

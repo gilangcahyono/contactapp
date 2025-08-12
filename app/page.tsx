@@ -15,14 +15,14 @@ import LogoutButton from "@/components/LogoutButton";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Home",
+  title: "Home | Contacts",
 };
 
-const Home = async ({
-  searchParams,
-}: {
+type Props = {
   searchParams: Promise<{ search: string }>;
-}) => {
+};
+
+const Home: React.FC<Props> = async ({ searchParams }) => {
   const search = (await searchParams).search;
   const token = await getToken();
   const res = await axios.get("/contacts", {

@@ -6,6 +6,7 @@ import EditForm from "@/components/EditForm";
 import { Contact } from "@/types/contact";
 import SubmitIconButton from "@/components/SubmitIconButton";
 import { Metadata } from "next";
+import DeleteThisContact from "@/components/DeleteThisContact";
 
 export const metadata: Metadata = {
   title: "Edit contact",
@@ -56,7 +57,8 @@ const Page: React.FC<Props> = async ({ params }) => {
 
       <p className="text-sm text-gray-500 ml-3 mb-2">More</p>
 
-      <div className="bg-white rounded-2xl px-3 py-3 flex items-center justify-between">
+      <DeleteThisContact id={contact.id} />
+      {/* <div className="bg-white rounded-2xl px-3 py-3 flex items-center justify-between">
         <p className="text-red-500 font-semibold">Delete this contact</p>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -72,7 +74,7 @@ const Page: React.FC<Props> = async ({ params }) => {
             d="m8.25 4.5 7.5 7.5-7.5 7.5"
           />
         </svg>
-      </div>
+      </div> */}
     </div>
   );
 };

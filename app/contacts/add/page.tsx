@@ -49,7 +49,7 @@ const Page: React.FC = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      router.push("/", { scroll: false });
+      setTimeout(() => router.push("/", { scroll: false }), 1000);
     } catch (error: any) {
       // console.error(error);
       if (error.response && (error.status >= 400 || error.status < 500)) {

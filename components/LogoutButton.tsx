@@ -31,7 +31,7 @@ const LogoutButton = () => {
       <button
         onClick={handleLogout}
         disabled={loading}
-        className="inline-flex items-center gap-2 disabled:cursor-not-allowed cursor-pointer"
+        className="inline-flex items-center gap-2 disabled:cursor-not-allowed cursor-pointer w-full"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

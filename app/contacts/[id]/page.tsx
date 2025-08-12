@@ -1,7 +1,7 @@
 import { getToken } from "@/lib/utils";
+import { Contact } from "@/types/contact";
 import Header from "@/components/Header";
 import Link from "next/link";
-import { Contact } from "@/types/contact";
 import axios from "@/lib/axios";
 import Dropdown from "@/components/Dropdown/index";
 import Toggle from "@/components/Dropdown/Toggle";
@@ -9,8 +9,6 @@ import Menu from "@/components/Dropdown/Menu";
 import Item from "@/components/Dropdown/Menu/Item";
 import ElipsHorizontalIcon from "@/components/icons/ElipsHorizontalIcon";
 import DeleteButton from "@/components/DeleteButton";
-import Modal, { Action } from "@/components/Modal";
-import { Body, Title } from "@/components/Modal";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -126,7 +124,7 @@ const Page: React.FC<Props> = async ({ params }) => {
         </a>
       </div>
 
-      <div className="text-sm text-gray-500 ml-3 mb-2">More</div>
+      <p className="text-sm text-gray-500 ml-3 mb-2">More</p>
 
       <div className="bg-white rounded-2xl px-3 py-3 flex items-center justify-between">
         <p>QR code</p>
@@ -145,27 +143,6 @@ const Page: React.FC<Props> = async ({ params }) => {
           />
         </svg>
       </div>
-
-      <Modal>
-        <Title>Delete this contact?</Title>
-        <Body>sfsdfds</Body>
-        <Action>
-          <div className="flex justify-end gap-2">
-            <button
-              type="button"
-              className="bg-gray-100 py-2 px-5 rounded-xl hover:bg-gray-200 active:bg-gray-300"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              className="text-white bg-cyan-500 py-2 px-5 rounded-xl hover:bg-cyan-600 active:bg-cyan-700"
-            >
-              Delete
-            </button>
-          </div>
-        </Action>
-      </Modal>
     </div>
   );
 };
