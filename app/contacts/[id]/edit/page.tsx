@@ -5,8 +5,17 @@ import axios from "@/lib/axios";
 import EditForm from "@/components/EditForm";
 import { Contact } from "@/types/contact";
 import SubmitIconButton from "@/components/SubmitIconButton";
+import { Metadata } from "next";
 
-const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
+export const metadata: Metadata = {
+  title: "Edit contact",
+};
+
+type Props = {
+  params: Promise<{ id: string }>;
+};
+
+const Page: React.FC<Props> = async ({ params }) => {
   const { id } = await params;
   const token = await getToken();
   const res = await axios.get(`/contacts/${id}`, {

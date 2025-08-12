@@ -11,6 +11,11 @@ import ElipsHorizontalIcon from "@/components/icons/ElipsHorizontalIcon";
 import DeleteButton from "@/components/DeleteButton";
 import Modal, { Action } from "@/components/Modal";
 import { Body, Title } from "@/components/Modal";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Detail contact",
+};
 
 type Props = {
   params: Promise<{ id: string }>;

@@ -12,6 +12,11 @@ import Menu from "@/components/Dropdown/Menu";
 import Item from "@/components/Dropdown/Menu/Item";
 import ElipsHorizontalIcon from "@/components/icons/ElipsHorizontalIcon";
 import LogoutButton from "@/components/LogoutButton";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Home",
+};
 
 const Home = async ({
   searchParams,
