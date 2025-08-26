@@ -12,7 +12,15 @@ const Item = (props: Props) => {
   const router = useRouter();
 
   const navigate = () => {
-    if (!href) return;
+    const dropdownMenu = document.getElementById("dropdown-menu");
+    dropdownMenu?.classList.toggle("hidden");
+    if (!href) {
+      const modal =
+        document.getElementById("delete-contact-modal") ||
+        document.getElementById("logout-modal");
+
+      modal?.classList.toggle("hidden");
+    }
     router.push(href, { scroll: false });
   };
 

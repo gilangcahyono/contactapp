@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import BackDrop from "@/components/BackDrop";
 import axios from "@/lib/axios";
-import Toast from "@/components/Toast";
+import { toast } from "@/lib/toast";
 
 const registerSchema = z
   .object({
@@ -46,7 +46,7 @@ const Page = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
+    formState: { errors, isSubmitting },
     setError,
   } = useForm<FormData>({
     resolver: zodResolver(registerSchema),
@@ -55,7 +55,8 @@ const Page = () => {
   const onSubmit = async (data: FormData) => {
     try {
       await axios.post("/register", data);
-      setTimeout(() => router.push("/login"), 1500);
+      router.push("/login");
+      toast("Registration successful");
     } catch (error: any) {
       // console.error(error);
       if (error.response && (error.status >= 400 || error.status < 500)) {
@@ -77,7 +78,7 @@ const Page = () => {
   };
 
   return (
-    <div className="px-4">
+    <div className="px-4 h-dvh flex flex-col justify-center">
       <Header>
         <Header.Title>Register your account</Header.Title>
       </Header>
@@ -158,13 +159,12 @@ const Page = () => {
 
       <p className="text-center mt-3">
         Already have an account ?{" "}
-        <Link href="/login" className="text-blue-500">
+        <Link href="/login" className="text-cyan-500 hover:underline">
           Login
         </Link>
       </p>
 
       <BackDrop open={isSubmitting} />
-      <Toast title="Successfully registered" open={isSubmitSuccessful} />
     </div>
   );
 };

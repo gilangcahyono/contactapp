@@ -9,8 +9,8 @@ import { useState } from "react";
 import { Contact } from "@/types/contact";
 import { useForm } from "react-hook-form";
 import BackDrop from "./BackDrop";
-import Toast from "./Toast";
 import * as z from "zod";
+import { toast } from "@/lib/toast";
 
 const editContactSchema = z.object({
   name: z
@@ -33,7 +33,7 @@ const EditForm = ({ contact }: { contact: Contact }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
+    formState: { errors, isSubmitting },
     setError,
   } = useForm<FormData>({
     resolver: zodResolver(editContactSchema),
@@ -47,9 +47,8 @@ const EditForm = ({ contact }: { contact: Contact }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setTimeout(() => {
-        router.push(`/contacts/${contact.id}`, { scroll: false });
-      }, 500);
+      router.push(`/contacts/${contact.id}`, { scroll: false });
+      toast("Contact saved");
     } catch (error: any) {
       // console.error(error);
       if (error.response && (error.status >= 400 || error.status < 500)) {
@@ -130,7 +129,6 @@ const EditForm = ({ contact }: { contact: Contact }) => {
       </form>
 
       <BackDrop open={isSubmitting} />
-      <Toast title="Contact saved" open={isSubmitSuccessful} />
     </>
   );
 };

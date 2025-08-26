@@ -29,7 +29,6 @@ type FormData = z.infer<typeof loginSchema>;
 const Page: React.FC = () => {
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
-
   const {
     register,
     handleSubmit,
@@ -60,21 +59,20 @@ const Page: React.FC = () => {
             }
           });
         }
-      } else {
-        setServerError(error.message || "Internal Server Error");
       }
+      setServerError("Internal Server Error");
     }
   };
 
   return (
-    <div className="px-4">
+    <div className="px-4 h-dvh flex flex-col justify-center">
       <Header>
         <Header.Title>Login to your account</Header.Title>
       </Header>
 
       {serverError && (
         <p className="text-pink-500 text-center mb-5">
-          Login failed {serverError}
+          Login Failed {serverError}
         </p>
       )}
 
@@ -119,7 +117,7 @@ const Page: React.FC = () => {
 
       <p className="text-center mt-3">
         Don&apos;t have an account ?{" "}
-        <Link href="/register" className="text-cyan-500">
+        <Link href="/register" className="text-cyan-500 hover:underline">
           Register
         </Link>
       </p>

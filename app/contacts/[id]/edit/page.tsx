@@ -7,6 +7,11 @@ import { Contact } from "@/types/contact";
 import SubmitIconButton from "@/components/SubmitIconButton";
 import { Metadata } from "next";
 import DeleteThisContact from "@/components/DeleteThisContact";
+import Modal from "@/components/Modal";
+import Title from "@/components/Modal/Title";
+import Body from "@/components/Modal/Body";
+import Action from "@/components/Modal/Action.tsx";
+import DeleteButton from "@/components/DeleteButton";
 
 export const metadata: Metadata = {
   title: "Edit contact",
@@ -57,24 +62,18 @@ const Page: React.FC<Props> = async ({ params }) => {
 
       <p className="text-sm text-gray-500 ml-3 mb-2">More</p>
 
-      <DeleteThisContact id={contact.id} />
-      {/* <div className="bg-white rounded-2xl px-3 py-3 flex items-center justify-between">
-        <p className="text-red-500 font-semibold">Delete this contact</p>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="size-6 text-gray-500"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="m8.25 4.5 7.5 7.5-7.5 7.5"
-          />
-        </svg>
-      </div> */}
+      <DeleteThisContact />
+
+      <Modal id="delete-contact-modal">
+        <Title>Delete this contact?</Title>
+        <Body>
+          Are you sure you want to delete this contact? This action cannot be
+          undone.
+        </Body>
+        <Action>
+          <DeleteButton id={contact.id} />
+        </Action>
+      </Modal>
     </div>
   );
 };

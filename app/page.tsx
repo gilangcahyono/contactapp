@@ -13,6 +13,10 @@ import Item from "@/components/Dropdown/Menu/Item";
 import ElipsHorizontalIcon from "@/components/icons/ElipsHorizontalIcon";
 import LogoutButton from "@/components/LogoutButton";
 import { Metadata } from "next";
+import Modal from "@/components/Modal";
+import Title from "@/components/Modal/Title";
+import Body from "@/components/Modal/Body";
+import Action from "@/components/Modal/Action.tsx";
 
 export const metadata: Metadata = {
   title: "Home | Contacts",
@@ -62,7 +66,21 @@ const Home: React.FC<Props> = async ({ searchParams }) => {
                 <span>Profile</span>
               </Item>
               <Item>
-                <LogoutButton />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
+                  />
+                </svg>
+                <span>Logout</span>
               </Item>
             </Menu>
           </Dropdown>
@@ -71,6 +89,13 @@ const Home: React.FC<Props> = async ({ searchParams }) => {
       <SearchInput />
       <ProductList contacts={contacts} />
       <AddContactButton />
+      <Modal id="logout-modal">
+        <Title>Logout</Title>
+        <Body>Are you sure you want to logout?</Body>
+        <Action>
+          <LogoutButton />
+        </Action>
+      </Modal>
     </div>
   );
 };

@@ -1,10 +1,12 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
+import Modal from "@/components/Modal";
 
-const DeleteThisContact: React.FC = () => {
+const ViewQrCode = () => {
   const handleClick = () => {
     const dropdownBackdrop = document.getElementById("dropdown-backdrop");
     dropdownBackdrop?.classList.toggle("hidden");
-    const modal = document.getElementById("delete-contact-modal");
+    const modal = document.getElementById("qr-code-modal");
     modal?.classList.toggle("hidden");
   };
 
@@ -18,7 +20,7 @@ const DeleteThisContact: React.FC = () => {
         onClick={handleClick}
         className="bg-white rounded-2xl px-3 py-3 flex items-center justify-between"
       >
-        <p className="text-red-500 font-semibold">Delete this contact</p>
+        <p>QR code</p>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -34,8 +36,21 @@ const DeleteThisContact: React.FC = () => {
           />
         </svg>
       </div>
+      <Modal id="qr-code-modal">
+        <div className="p-4">
+          <img
+            src="https://hexdocs.pm/qr_code/docs/qrcode.svg"
+            alt="qr-code"
+            className="w-full"
+          />
+          <p className="text-sm text-gray-500 my-2">Scan the QR code above</p>
+          <button className="w-full bg-cyan-500 text-white py-3 rounded-xl hover:bg-cyan-600 active:bg-cyan-700">
+            Share
+          </button>
+        </div>
+      </Modal>
     </>
   );
 };
 
-export default DeleteThisContact;
+export default ViewQrCode;

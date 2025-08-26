@@ -1,8 +1,9 @@
 import { Contact } from "@/types/contact";
 import Link from "next/link";
-import React from "react";
 
-const ProductList: React.FC<{ contacts: Contact[] }> = (props) => {
+type Props = { contacts: Contact[] };
+
+const ProductList: React.FC<Props> = (props) => {
   const { contacts } = props;
 
   if (!contacts.length) {

@@ -4,7 +4,6 @@
 import BackDrop from "@/components/BackDrop";
 import Header from "@/components/Header";
 import SubmitIconButton from "@/components/SubmitIconButton";
-import Toast from "@/components/Toast";
 import Link from "next/link";
 import axios from "@/lib/axios";
 import { getToken } from "@/lib/utils";
@@ -13,6 +12,7 @@ import { useState } from "react";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "@/lib/toast";
 
 const addContactSchema = z.object({
   name: z
@@ -35,7 +35,7 @@ const Page: React.FC = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
+    formState: { errors, isSubmitting },
     setError,
   } = useForm<FormData>({
     resolver: zodResolver(addContactSchema),
@@ -49,7 +49,8 @@ const Page: React.FC = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setTimeout(() => router.push("/", { scroll: false }), 1000);
+      router.push("/", { scroll: false });
+      toast("Contact saved");
     } catch (error: any) {
       // console.error(error);
       if (error.response && (error.status >= 400 || error.status < 500)) {
@@ -64,9 +65,8 @@ const Page: React.FC = () => {
             }
           });
         }
-      } else {
-        setServerError("Internal Server Error");
       }
+      setServerError("Internal Server Error");
     }
   };
 
@@ -153,7 +153,6 @@ const Page: React.FC = () => {
       </form>
 
       <BackDrop open={isSubmitting} />
-      <Toast title="Contact saved" open={isSubmitSuccessful} />
     </div>
   );
 };

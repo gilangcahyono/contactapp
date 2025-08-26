@@ -2,10 +2,31 @@
 
 const Menu = ({ children }: { children: React.ReactNode }) => {
   const toggle = () => {
-    const dropdownMenu = document.getElementById("dropdown-menu");
-    dropdownMenu?.classList.toggle("hidden");
+    const modal = document.getElementById("delete-contact-modal");
+
+    if (
+      modal?.classList.contains("fixed") &&
+      !modal.classList.contains("hidden")
+    ) {
+      return;
+    }
+
+    const modalQr = document.getElementById("qr-code-modal");
+
+    if (
+      modalQr?.classList.contains("fixed") &&
+      !modalQr.classList.contains("hidden")
+    ) {
+      const dropdownBackdrop = document.getElementById("dropdown-backdrop");
+      dropdownBackdrop?.classList.toggle("hidden");
+      modalQr?.classList.toggle("hidden");
+      return;
+    }
+
     const dropdownBackdrop = document.getElementById("dropdown-backdrop");
     dropdownBackdrop?.classList.toggle("hidden");
+    const dropdownMenu = document.getElementById("dropdown-menu");
+    dropdownMenu?.classList.toggle("hidden");
   };
 
   return (
